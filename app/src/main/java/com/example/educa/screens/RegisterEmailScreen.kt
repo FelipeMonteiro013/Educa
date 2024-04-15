@@ -1,6 +1,7 @@
 package com.example.educa.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,9 +39,17 @@ fun RegisterEmailScreen(navController: NavHostController) {
     var dtNasc by remember {
         mutableStateOf("")
     }
-    val gender by remember {
-        mutableStateOf("")
+    var gender by remember {
+        mutableIntStateOf(0)
     }
+    var accountType by remember {
+        mutableIntStateOf(0)
+    }
+
+    var distance by remember {
+        mutableIntStateOf(0)
+    }
+
 
     var controllerPage by remember {
         mutableStateOf("email")
@@ -76,10 +86,12 @@ fun RegisterEmailScreen(navController: NavHostController) {
                         nextStep = {
                             currentProgress += 10F
                             controllerPage = "name"
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
                         },
                         step = controllerPage
                     )
                 }
+
                 "name" -> {
                     RegisterComponent(
                         titleText = "Qual é seu nome?",
@@ -97,10 +109,12 @@ fun RegisterEmailScreen(navController: NavHostController) {
                         nextStep = {
                             currentProgress += 10F
                             controllerPage = "dtNasc"
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
                         },
                         step = controllerPage
                     )
                 }
+
                 "dtNasc" -> {
                     RegisterComponent(
                         titleText = "Data de nascimento?",
@@ -116,26 +130,72 @@ fun RegisterEmailScreen(navController: NavHostController) {
                         nextStep = {
                             currentProgress += 10F
                             controllerPage = "gender"
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
                         },
                         step = controllerPage
                     )
                 }
+
                 "gender" -> {
                     RegisterComponent(
                         titleText = "Qual é o seu gênero?",
                         descriptionText = "Selecione a opção que melhor te descreve",
-                        inputValue = gender,
                         backStep = {
                             currentProgress -= 10F
                             controllerPage = "dtNasc"
                         },
                         nextStep = {
                             currentProgress += 10F
-                            controllerPage = ""
+                            controllerPage = "accountType"
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateGender = {
+                            gender = it
+                        }
                     )
                 }
+
+                "accountType" -> {
+                    RegisterComponent(
+                        titleText = "O que você deseja ser?",
+                        descriptionText = "Selecione a forma que podemos te indicar",
+                        backStep = {
+                            currentProgress -= 10F
+                            controllerPage = "gender"
+                        },
+                        nextStep = {
+                            currentProgress += 10F
+                            controllerPage = "distance"
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
+                        },
+                        step = controllerPage,
+                        updateAccountType = {
+                            accountType = it
+                        }
+                    )
+                }
+
+                "distance" -> {
+                    RegisterComponent(
+                        titleText = "Distância maxima",
+                        descriptionText = "Use o controle deslizante para definir a distância máxima",
+                        updateDistance = {
+                            distance = it
+                        },
+                        backStep = {
+                            currentProgress -= 10F
+                            controllerPage = "accountType"
+                        },
+                        nextStep = {
+                            currentProgress += 10F
+                            controllerPage = ""
+                            Log.i("DADOS", email + name + dtNasc + gender + accountType + distance)
+                        },
+                        step = controllerPage,
+                    )
+                }
+
                 else -> {
                     Column(
                         verticalArrangement = Arrangement.Center,
