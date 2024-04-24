@@ -10,22 +10,4 @@ class UserRepository(context: Context) {
     fun create(user: User): Long {
         return db.create(user = user)
     }
-
-    fun update(user: User): Int {
-        return db.update(user = user)
-    }
-
-    fun delete(user: User): Int {
-        return db.delete(user = user)
-    }
-
-    fun getUserById(id: Long): User {
-        return db.getUserById(id = id)
-    }
-
-    fun listUsers(): List<User> {
-        return db.listUsers()
-    }
-
-
 }

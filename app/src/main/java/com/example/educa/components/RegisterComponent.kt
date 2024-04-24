@@ -2,7 +2,6 @@ package com.example.educa.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -354,16 +353,14 @@ fun RegisterComponent(
                             "Outros"
                         )
 
-                        var tempInterestList = listOf<Int>()
+                        val tempList = listOf<Int>()
 
                         var multipleInterestChecked by remember {
-                            mutableStateOf(tempInterestList)
+                            mutableStateOf(tempList)
                         }
 
-                        var tempAcademicEducationList = listOf<Int>()
-
                         var multipleAcademicEducationChecked by remember {
-                            mutableStateOf(tempAcademicEducationList)
+                            mutableStateOf(tempList)
                         }
 
                         Column(modifier = Modifier.padding(horizontal = 30.dp)) {
@@ -490,16 +487,15 @@ fun RegisterComponent(
                             "Outros",
                         )
 
-                        var tempSkillsList = listOf<Int>()
+                        val tempList = listOf<Int>()
 
                         var multipleSkillsChecked by remember {
-                            mutableStateOf(tempSkillsList)
+                            mutableStateOf(tempList)
                         }
 
-                        var tempExperiencesList = listOf<Int>()
 
                         var multipleExperiencesChecked by remember {
-                            mutableStateOf(tempExperiencesList)
+                            mutableStateOf(tempList)
                         }
 
                         Column(modifier = Modifier.padding(horizontal = 30.dp)) {

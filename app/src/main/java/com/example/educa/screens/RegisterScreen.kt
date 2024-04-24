@@ -64,20 +64,20 @@ fun RegisterEmailScreen(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
-    var tempInterestList = listOf<Int>()
+    val tempList = listOf<Int>()
 
     var userInterestChecked by remember {
-        mutableStateOf(tempInterestList)
+        mutableStateOf(tempList)
     }
 
     var userAcademicEducationChecked by remember {
-        mutableStateOf(tempInterestList)
+        mutableStateOf(tempList)
     }
     var userSkillsChecked by remember {
-        mutableStateOf(tempInterestList)
+        mutableStateOf(tempList)
     }
     var userExperiencesChecked by remember {
-        mutableStateOf(tempInterestList)
+        mutableStateOf(tempList)
     }
 
     var userPhoto by remember {
@@ -339,7 +339,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
                                 userPhoto = userPhoto,
                             )
 
-                            var isCreated = userRepository.create(user)
+                            val isCreated = userRepository.create(user)
 
                             if (isCreated.toString().isNotEmpty()) navController.navigate("login")
                         },
