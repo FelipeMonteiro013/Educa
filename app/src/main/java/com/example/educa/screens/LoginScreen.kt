@@ -92,7 +92,7 @@ fun LoginScreen(navController: NavController) {
                 IconButton(onClick = {
                     passwordVisible = !passwordVisible
                 }) {
-                    if (passwordVisible == true) {
+                    if (passwordVisible) {
                         Icon(
                             imageVector = Icons.Outlined.VisibilityOff,
                             contentDescription = "Tornar senha visivel"
