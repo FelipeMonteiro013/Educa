@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.educa.screens.HomeScreen
 import com.example.educa.screens.LoginScreen
 import com.example.educa.screens.RegisterEmailScreen
 import com.example.educa.screens.WelcomeScreen
@@ -28,10 +29,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "login") {
+                    NavHost(navController = navController, startDestination = "home") {
                         composable("login") { LoginScreen(navController) }
                         composable("welcome") { WelcomeScreen(navController) }
                         composable("register_email") { RegisterEmailScreen(navController) }
+                        composable("home") {HomeScreen(navController)}
                     }
                 }
             }

@@ -10,4 +10,10 @@ class UserRepository(context: Context) {
     fun create(user: User): Long {
         return db.create(user = user)
     }
+
+//    TODO Mover esse trecho para um arquivo separado
+    fun listUsers(): List<User> {
+        return db.listUsers()
+    }
+
 }
