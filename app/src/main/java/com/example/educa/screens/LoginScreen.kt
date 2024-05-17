@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,12 +35,41 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.educa.database.repository.UserRepository
+import com.example.educa.model.User
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import com.example.educa.ui.theme.TextColor
 
+
+@Composable
+fun createMock(modifier: Modifier = Modifier) {
+    val mockUser = User(
+        id = 0,
+        name = "Fulano da Silva",
+        email = "fulano@email.com",
+        password = "123",
+        dtNasc = "Tue Oct 05 22:00:00 GMT-03:00 1999",
+        distance = 5,
+        gender = "H",
+        accountType = 0,
+        interest = listOf(0,1,2,3),
+        academicEducation = listOf(0,1,2,3),
+        skills = listOf(0,1,2,3),
+        experiences = listOf(0,1,2,3),
+        userPhoto = "https://www.psicologavalinhos.com.br/_libs/imgs/final/11.jpg",
+    )
+
+    val context = LocalContext.current
+
+    val userRepository = UserRepository(context)
+    userRepository.create(mockUser)
+}
+
 @Composable
 fun LoginScreen(navController: NavController) {
+
+    createMock()
 
     var emailField by remember {
         mutableStateOf("")
@@ -110,7 +140,7 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
         Button(
             onClick = {
-
+                navController.navigate("home")
             },
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Primary),

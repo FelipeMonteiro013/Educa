@@ -53,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -132,7 +133,7 @@ fun RegisterComponent(
                         val datePickerState =
                             rememberDatePickerState(
                                 initialSelectedDateMillis = 1578096000000,
-                                initialDisplayMode = DisplayMode.Picker
+                                initialDisplayMode = DisplayMode.Input
                             )
                         DatePicker(
                             state = datePickerState,
@@ -317,6 +318,7 @@ fun RegisterComponent(
                     }
 
                     "aboutYouProfessional" -> {
+//                        TODO: Guardar essas listas no banco e puxar de lá
                         val listAreaOfInterest by remember {
                             mutableStateOf(
                                 arrayOf(
@@ -595,6 +597,8 @@ fun RegisterComponent(
                                 updateValue(uri.toString())
                             }
 
+
+
                         Row(
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier.fillMaxWidth()
@@ -620,7 +624,7 @@ fun RegisterComponent(
                                         AsyncImage(
                                             model = uri,
                                             contentDescription = null,
-                                            modifier = Modifier.fillMaxSize()
+                                            modifier = Modifier.fillMaxSize(),
                                         )
                                     } else {
                                         Icon(

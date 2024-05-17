@@ -1,21 +1,30 @@
 package com.example.educa.screens
 
 import android.net.Uri
-import androidx.compose.foundation.Image
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -30,38 +39,39 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.educa.R
 import com.example.educa.database.repository.UserRepository
+import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
-
-
-@Composable
-fun ImageFromLocalUri(uri: String) {
-    val painter = rememberAsyncImagePainter(uri)
-    Image(
-        painter = painter,
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize()
-    )
-}
-
-
-
-
-
+import com.example.educa.ui.theme.SuccessColor
 
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(verticalArrangement = Arrangement.SpaceBetween) {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .fillMaxHeight()
+            .background(BackgroundColor)
+    ) {
+
+
+//        Header
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -76,9 +86,16 @@ fun HomeScreen(navController: NavController) {
                     fontWeight = FontWeight.Bold,
                     color = Primary
                 )
-                Text(text = "+", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Secondary)
+                Text(
+                    text = "+",
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Secondary
+                )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate("discovery_tweaks")
+            }) {
 
                 Icon(
                     tint = Primary,
@@ -93,105 +110,209 @@ fun HomeScreen(navController: NavController) {
         val context = LocalContext.current
         val userRepository = UserRepository(context)
 
+
         val listUsersState = remember {
             mutableStateOf(userRepository.listUsers())
         }
 
-//        ImageFromLocalUri("https://avatars2.githubusercontent.com/u/3265208?v=3&s=100")
+        for (user in listUsersState.value) {
 
-        Card(
-            modifier = Modifier
-//                .fillMaxWidth()
-                .padding(15.dp)
-        ) {
+            Log.i("TESTE", "Encoded Uri: ${user.userPhoto}")
+            Log.i("TESTE", "Decoded Uri: ${Uri.decode(user.userPhoto)}")
 
+//                context.contentResolver.takePersistableUriPermission(Uri.parse(user.userPhoto), Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//        Content
 
+//            TODO: Esse cara vai virar um componente
+            Card(
+                modifier = Modifier
+                    .height(650.dp)
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                elevation = CardDefaults.elevatedCardElevation()
 
-            val ht = "https://avatars2.githubusercontent.com/u/3265208?v=3&s=100"
-            val uri = "content://com.android.providers.downloads.documents/document/msf%3A31"
-
-
-
-
-            Image(
-                painter = rememberAsyncImagePainter(
-                    model = Uri.parse(uri)  // or ht
-                )
-                ,
-                contentDescription = "123",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillWidth
-            )
-
-
-
-
-            Box(
-
-                contentAlignment = Alignment.Center
             ) {
 
-                for (user in listUsersState.value) {
-                    ImageFromLocalUri(user.userPhoto)
-                Text(text = user.toString())
+
+                Box(
+                    contentAlignment = Alignment.BottomStart,
+                    modifier = Modifier.background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            ), startY = 800.0F
+                        )
+                    )
+                ) {
+
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(user.userPhoto)
+                            .build(),
+                        contentDescription = null,
+                        imageLoader = ImageLoader(context),
+                        contentScale = ContentScale.FillHeight,
+                        error = painterResource(R.drawable.baseline_image_not_supported_24),
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(Color.Transparent, Color.Black),
+                                    startY = 0.0F,
+                                    endY = 400.0F
+                                )
+                            )
+                    ) {
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        ) {
+                            Text(
+                                text = user.name,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 32.sp
+                            )
+                            Text(
+                                text = "42",
+                                color = Color.White,
+                                fontSize = 32.sp,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                        }
+
+                        Text(
+                            text = if (user.accountType == 0) "Aluno(a)" else "Professor(a)",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp, modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                        Text(
+                            text = "a ${user.distance} km de distância",
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(RoundedCornerShape(60.dp))
+                                    .background(Color.White)
+
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Close,
+                                    contentDescription = null,
+                                    Modifier.size(40.dp),
+                                    tint = Color.Red
+                                )
+                            }
+                            IconButton(
+                                onClick = { navController.navigate("user_information") },
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(RoundedCornerShape(60.dp))
+                                    .background(Color.White)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Info,
+                                    contentDescription = null,
+                                    Modifier
+                                        .size(40.dp),
+                                    tint = Primary
+                                )
+                            }
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(RoundedCornerShape(60.dp))
+                                    .background(Color.White)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.MenuBook,
+                                    contentDescription = null,
+                                    Modifier
+                                        .size(40.dp),
+                                    tint = SuccessColor
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    }
+
+
                 }
+
+
             }
-//                Column(modifier = Modifier.padding(10.dp)) {
-//
-//                Row {
-//                    Text(text = "Marcos Antônio")
-//                    Text(text = "57")
-//                }
-//
-//            Text(text = "Professor")
-//            }
-//            Text(text = "a 6 km de distância")
-        }
-        var selectedItem by remember { mutableIntStateOf(0) }
+            var selectedItem by remember { mutableIntStateOf(0) }
 
-        NavigationBar(containerColor = Color.Transparent) {
-            NavigationBarItem(
-                icon = { Icon(Icons.Outlined.Home, contentDescription = "Pagina inicial") },
-                selected = selectedItem == 0,
-                onClick = { selectedItem = 0 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Secondary,
-                    unselectedIconColor = Primary,
+//        Footer
+
+            NavigationBar(containerColor = Color.Transparent) {
+                NavigationBarItem(
+                    icon = { Icon(Icons.Outlined.Home, contentDescription = "Pagina inicial") },
+                    selected = selectedItem == 0,
+                    onClick = { selectedItem = 0 },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Secondary,
+                        unselectedIconColor = Primary,
+                    )
                 )
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Matches") },
-                selected = selectedItem == 1,
-                onClick = { selectedItem = 1 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Secondary,
-                    unselectedIconColor = Primary,
-                    indicatorColor = Color.White,
+                NavigationBarItem(
+                    icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Matches") },
+                    selected = selectedItem == 1,
+                    onClick = { selectedItem = 1 },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Secondary,
+                        unselectedIconColor = Primary,
+                        indicatorColor = Color.White,
 
-                    )
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Outlined.Notifications, contentDescription = "Notificações") },
-                selected = selectedItem == 2,
-                onClick = { selectedItem = 2 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Secondary,
-                    unselectedIconColor = Primary,
-                    indicatorColor = Color.White,
+                        )
+                )
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Notifications,
+                            contentDescription = "Notificações"
+                        )
+                    },
+                    selected = selectedItem == 2,
+                    onClick = { selectedItem = 2 },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Secondary,
+                        unselectedIconColor = Primary,
+                        indicatorColor = Color.White,
 
-                    )
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Outlined.AccountCircle, contentDescription = "Perfil") },
-                selected = selectedItem == 3,
-                onClick = { selectedItem = 3 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Secondary,
-                    unselectedIconColor = Primary,
-                    indicatorColor = Color.White,
+                        )
+                )
+                NavigationBarItem(
+                    icon = { Icon(Icons.Outlined.AccountCircle, contentDescription = "Perfil") },
+                    selected = selectedItem == 3,
+                    onClick = { selectedItem = 3 },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Secondary,
+                        unselectedIconColor = Primary,
+                        indicatorColor = Color.White,
 
-                    )
-            )
+                        )
+                )
+
+            }
         }
     }
 }

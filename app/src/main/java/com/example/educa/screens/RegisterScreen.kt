@@ -1,6 +1,7 @@
 package com.example.educa.screens
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -336,7 +337,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
                                 academicEducation = userAcademicEducationChecked,
                                 skills = userSkillsChecked,
                                 experiences = userExperiencesChecked,
-                                userPhoto = userPhoto,
+                                userPhoto = Uri.decode(userPhoto),
                             )
 
                             val isCreated = userRepository.create(user)
