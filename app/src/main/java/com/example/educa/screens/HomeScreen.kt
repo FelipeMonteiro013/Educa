@@ -43,35 +43,11 @@ import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 
-//                        TODO: Organizar essa função
-fun getAgeFormat(dtNasc: String): Long {
-    try {
-//        val originalDateString = dtNasc
 
-        // Formatter para parsear a data original
-//        val originalFormatter = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.ENGLISH)
-
-        // Parse da data original para um Date
-//        val date: Date = originalFormatter.parse(originalDateString)
-
-        // Converte Date para LocalDate
-//        val birthDate: LocalDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-
-        // Data atual
-//        val currentDate = LocalDate.now()
-
-        // Calcular a idade
-//        val age = ChronoUnit.YEARS.between(birthDate, currentDate)
-        return 1
-
-    } catch (e: Exception) {
-        Log.e("TESTE", e.message.toString())
-        return 0
-    }
-}
 
 @Composable
 fun HomeScreen(navController: NavController, loggedUserId: String) {
+
 
     val context = LocalContext.current
     val userRepository = UserRepository(context = context)
@@ -104,7 +80,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String) {
                 )
             }
             IconButton(onClick = {
-                navController.navigate("discovery_tweaks")
+                navController.navigate("discovery_tweaks/${loggedUserId}")
             }) {
 
                 Icon(
@@ -152,6 +128,8 @@ fun HomeScreen(navController: NavController, loggedUserId: String) {
 
                 listCardController++
 
+            }, userInformation = {
+                navController.navigate("user_information/${listUsersState[listCardController].id}/${loggedUserId}")
             })
         } else {
             Column(

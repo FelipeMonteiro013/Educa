@@ -38,18 +38,19 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.educa.R
-import com.example.educa.database.repository.LikeRepository
 import com.example.educa.model.User
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.SuccessColor
 
 @Composable
-fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
+fun CardMatchComponent(
+    user: User,
+    isLike: () -> Unit,
+    isNotLike: () -> Unit,
+    userInformation: () -> Unit
+) {
 
     val context = LocalContext.current
-
-
-
 
     Box {
         Card(
@@ -60,8 +61,6 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
             elevation = CardDefaults.elevatedCardElevation()
 
         ) {
-
-
             Box(
                 contentAlignment = Alignment.BottomStart,
                 modifier = Modifier.background(
@@ -73,8 +72,6 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                     )
                 )
             ) {
-
-
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(user.userPhoto)
@@ -85,7 +82,6 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                     error = painterResource(R.drawable.baseline_image_not_supported_24),
                     modifier = Modifier.fillMaxSize()
                 )
-
                 Column(
                     modifier = Modifier
                         .padding(top = 20.dp)
@@ -97,11 +93,8 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                             )
                         )
                 ) {
-
-
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
                     Column(
-//                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     ) {
                         Text(
@@ -147,7 +140,7 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                                 )
                             }
                             IconButton(
-                                onClick = { /*TODO*/ },
+                                onClick = { userInformation() },
                                 modifier = Modifier
                                     .size(60.dp)
                                     .clip(RoundedCornerShape(60.dp))
@@ -164,15 +157,6 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                             IconButton(
                                 onClick = {
                                     isLike()
-                                    /*TODO*/
-//                                    val likeRepository = LikeRepository(context)
-//                                    val response = likeRepository.getPossibleLike(user.id)
-//                                    val updateLike = response
-//
-//                                    updateLike.loggedUserId = loggedUser.id
-//                                    updateLike.loggedUserLike = true
-//
-//                                    likeRepository.like(updateLike)
                                 },
                                 modifier = Modifier
                                     .size(60.dp)
@@ -190,11 +174,7 @@ fun CardMatchComponent(user: User, isLike: () -> Unit, isNotLike: () -> Unit) {
                         }
                         Spacer(modifier = Modifier.padding(vertical = 10.dp))
                     }
-
-
                 }
-
-
             }
         }
     }
@@ -207,6 +187,7 @@ private fun PreviewCardMatchComponent() {
     CardMatchComponent(
         isLike = {},
         isNotLike = {},
+        userInformation = {},
         user = User(
             name = "Fulano da Silva",
             email = "fulano@email.com",

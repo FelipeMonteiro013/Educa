@@ -1,6 +1,6 @@
 package com.example.educa.screens
 
-import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.educa.components.InformationCardComponent
 import com.example.educa.database.repository.UserRepository
+import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Secondary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun UserInformationScreen(navController: NavController, id: String) {
-
+fun UserInformationScreen(navController: NavController, id: String, loggedUserId: String) {
 
     val context = LocalContext.current
     val userRepository = UserRepository(context)
@@ -47,7 +47,7 @@ fun UserInformationScreen(navController: NavController, id: String) {
 
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.navigate("home") }) {
+            IconButton(onClick = { navController.navigate("home/${loggedUserId}") }) {
 
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,
@@ -60,26 +60,34 @@ fun UserInformationScreen(navController: NavController, id: String) {
             Text(text = userData.name)
         }
 
-
-
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-
-
-//        TODO: Esse cara vai virar um componente onde eu mando o titulo e a lista para rodar o for
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(BackgroundColor)
+        ) {
 
 
             if (userData.interest.size > 0) {
-                InformationCardComponent(title = "Minha área de interesse:", list = userData.interest)
+                InformationCardComponent(
+                    title = "Minha área de interesse:",
+                    list = userData.interest
+                )
             }
 
             if (userData.academicEducation.size > 0) {
-                InformationCardComponent(title = "Minha formação academica:", list = userData.academicEducation)
+                InformationCardComponent(
+                    title = "Minha formação academica:",
+                    list = userData.academicEducation
+                )
             }
             if (userData.skills.size > 0) {
                 InformationCardComponent(title = "Minhas habilidades:", list = userData.skills)
             }
             if (userData.experiences.size > 0) {
-                InformationCardComponent(title = "Minhas experiencias:", list = userData.experiences)
+                InformationCardComponent(
+                    title = "Minhas experiencias:",
+                    list = userData.experiences
+                )
             }
 
 //                Card(

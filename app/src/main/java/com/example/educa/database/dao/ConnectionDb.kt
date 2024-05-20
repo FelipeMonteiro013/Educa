@@ -153,10 +153,10 @@ abstract class ConnectionDb : RoomDatabase() {
                             distance = 5,
                             gender = "H",
                             accountType = 0,
-                            interest = listOf(0, 1, 2, 3),
+                            interest = listOf(1, 2, 3),
                             academicEducation = listOf(4, 5, 6, 7),
-                            skills = listOf(8, 9, 10, 11),
-                            experiences = listOf(12, 13, 14, 15),
+                            skills = listOf(8, 9, 1, 2),
+                            experiences = listOf(2, 8, 11, 13),
                             userPhoto = "https://www.psicologavalinhos.com.br/_libs/imgs/final/11.jpg",
                         ),
                         User(
@@ -167,10 +167,10 @@ abstract class ConnectionDb : RoomDatabase() {
                             distance = 10,
                             gender = "H",
                             accountType = 1,
-                            interest = listOf(0, 2, 3, 4),
+                            interest = listOf(2, 3, 4),
                             academicEducation = listOf(5, 6, 7, 8),
-                            skills = listOf(9, 10, 11, 12),
-                            experiences = listOf(13, 14, 15, 16),
+                            skills = listOf(3, 6, 8, 9),
+                            experiences = listOf(8, 11, 12, 13),
                             userPhoto = "https://marista.edu.br/wp-content/uploads/2022/07/EF1.png"
                         ),
                         User(
@@ -183,8 +183,8 @@ abstract class ConnectionDb : RoomDatabase() {
                             accountType = 1,
                             interest = listOf(1, 2, 4, 5),
                             academicEducation = listOf(6, 7, 8, 9),
-                            skills = listOf(10, 11, 12, 13),
-                            experiences = listOf(14, 15, 16, 17),
+                            skills = listOf(2, 4, 6, 8),
+                            experiences = listOf(1, 7, 10, 12),
                             userPhoto = "https://cer.sebrae.com.br/wp-content/uploads/2022/12/GettyImages-1408304021.jpg"
                         ),
                         User(
@@ -195,10 +195,10 @@ abstract class ConnectionDb : RoomDatabase() {
                             distance = 20,
                             gender = "F",
                             accountType = 0,
-                            interest = listOf(0, 3, 5, 6),
+                            interest = listOf(3, 5, 6),
                             academicEducation = listOf(4, 6, 8, 10),
-                            skills = listOf(8, 10, 12, 14),
-                            experiences = listOf(12, 14, 16, 18),
+                            skills = listOf(1, 5, 7, 8),
+                            experiences = listOf(1, 4, 8, 10),
                             userPhoto = "https://escolasexponenciais.com.br/wp-content/uploads/2022/04/menina-1.png"
                         ),
                         User(
@@ -211,8 +211,8 @@ abstract class ConnectionDb : RoomDatabase() {
                             accountType = 1,
                             interest = listOf(1, 3, 4, 6),
                             academicEducation = listOf(5, 7, 9, 11),
-                            skills = listOf(9, 11, 13, 15),
-                            experiences = listOf(13, 15, 17, 19),
+                            skills = listOf(9),
+                            experiences = listOf(2, 4, 10),
                             userPhoto = "https://thumbs.dreamstime.com/b/retrato-da-professora-usando-laptop-sentada-%C3%A0-mesa-na-sala-de-aula-e-298200036.jpg"
                         )
                     )
@@ -231,9 +231,6 @@ abstract class ConnectionDb : RoomDatabase() {
                             )
                         )
                     }
-
-
-
 
 
                 }
