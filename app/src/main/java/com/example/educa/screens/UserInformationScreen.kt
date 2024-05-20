@@ -1,5 +1,6 @@
 package com.example.educa.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -26,26 +27,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.educa.components.InformationCardComponent
+import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun UserInformationScreen(navController: NavController) {
+fun UserInformationScreen(navController: NavController, id: String) {
+
+
+    val context = LocalContext.current
+    val userRepository = UserRepository(context)
+
+    val userData by remember {
+        mutableStateOf(userRepository.getUserById(id.toLong()))
+    }
+
+    Log.i("TESTE", userData.toString())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
 
     ) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { navController.navigate("home") }) {
 
                 Icon(
@@ -56,6 +72,7 @@ fun UserInformationScreen(navController: NavController) {
                     tint = Secondary
                 )
             }
+            Text(text = userData.name)
         }
 
 
@@ -64,68 +81,83 @@ fun UserInformationScreen(navController: NavController) {
 
 
 //        TODO: Esse cara vai virar um componente onde eu mando o titulo e a lista para rodar o for
-            for (i in 1..4)
-                Card(
-                    onClick = { /*TODO*/ }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp)
-                ) {
-                    Column(modifier = Modifier.padding(10.dp)) {
-                        Text(
-                            text = "Minha área de interesse:",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                        Divider(modifier = Modifier.padding(vertical = 10.dp))
 
-                        val listAreaOfInterest by remember {
-                            mutableStateOf(
-                                arrayOf(
-                                    "Técnologia",
-                                    "Inovação",
-                                    "Negócios",
-                                    "Artes",
-                                    "Cultura",
-                                    "Ciências",
-                                    "Pesquisa",
-                                    "Saúde",
-                                    "Bem-estar",
-                                    "Educação",
-                                    "Ensino",
-                                    "Sustentabilidade",
-                                    "Meio Ambiente"
-                                )
-                            )
-                        }
 
-                        FlowRow {
-                            listAreaOfInterest.forEachIndexed { index, s ->
-                                Box(modifier = Modifier.padding(horizontal = 2.dp)) {
+            if (userData.interest.size > 0) {
+                InformationCardComponent(title = "Minha área de interesse:", list = userData.interest)
+            }
 
-                                    FilterChip(
-                                        selected = true,
-                                        onClick = {},
-                                        label = {
-                                            Text(
-                                                text = s,
-                                                maxLines = 1,
-                                                textAlign = TextAlign.Center
-                                            )
-                                        },
-                                        colors = FilterChipDefaults.filterChipColors(
-                                            labelColor = Color.Gray,
-                                            selectedLabelColor = Color.White,
-                                            selectedContainerColor = Primary
-                                        ),
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
+            if (userData.academicEducation.size > 0) {
+                InformationCardComponent(title = "Minha formação academica:", list = userData.academicEducation)
+            }
+            if (userData.skills.size > 0) {
+                InformationCardComponent(title = "Minhas habilidades:", list = userData.skills)
+            }
+            if (userData.experiences.size > 0) {
+                InformationCardComponent(title = "Minhas experiencias:", list = userData.experiences)
+            }
 
-                                }
-
-                            }
-                        }
-                    }
-                }
+//                Card(
+//                    onClick = { /*TODO*/ }, modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 10.dp)
+//                ) {
+//                    Column(modifier = Modifier.padding(10.dp)) {
+//                        Text(
+//                            text = "Minha área de interesse:",
+//                            fontWeight = FontWeight.Bold,
+//                            fontSize = 18.sp
+//                        )
+//                        Divider(modifier = Modifier.padding(vertical = 10.dp))
+//
+//                        val listAreaOfInterest by remember {
+//                            mutableStateOf(
+//                                arrayOf(
+//                                    "Técnologia",
+//                                    "Inovação",
+//                                    "Negócios",
+//                                    "Artes",
+//                                    "Cultura",
+//                                    "Ciências",
+//                                    "Pesquisa",
+//                                    "Saúde",
+//                                    "Bem-estar",
+//                                    "Educação",
+//                                    "Ensino",
+//                                    "Sustentabilidade",
+//                                    "Meio Ambiente"
+//                                )
+//                            )
+//                        }
+//
+//                        FlowRow {
+//                            listAreaOfInterest.forEachIndexed { index, s ->
+//                                Box(modifier = Modifier.padding(horizontal = 2.dp)) {
+//
+//                                    FilterChip(
+//                                        selected = true,
+//                                        onClick = {},
+//                                        label = {
+//                                            Text(
+//                                                text = s,
+//                                                maxLines = 1,
+//                                                textAlign = TextAlign.Center
+//                                            )
+//                                        },
+//                                        colors = FilterChipDefaults.filterChipColors(
+//                                            labelColor = Color.Gray,
+//                                            selectedLabelColor = Color.White,
+//                                            selectedContainerColor = Primary
+//                                        ),
+//                                        shape = RoundedCornerShape(20.dp)
+//                                    )
+//
+//                                }
+//
+//                            }
+//                        }
+//                    }
+//                }
 
         }
 

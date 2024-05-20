@@ -1,11 +1,11 @@
 package com.example.educa.database.repository
 
 import android.content.Context
-import com.example.educa.database.dao.UserDb
+import com.example.educa.database.dao.ConnectionDb
 import com.example.educa.model.User
 
 class UserRepository(context: Context) {
-    var db = UserDb.getDatabase(context).userDao()
+    var db = ConnectionDb.getDatabase(context).userDao()
 
     fun create(user: User): Long {
         return db.create(user = user)
@@ -15,5 +15,14 @@ class UserRepository(context: Context) {
     fun listUsers(): List<User> {
         return db.listUsers()
     }
+
+    fun getUserById(id: Long): User {
+     return db.getUserById(id)
+    }
+
+    fun checkDb() : Boolean {
+        return db.checkDb()
+    }
+
 
 }

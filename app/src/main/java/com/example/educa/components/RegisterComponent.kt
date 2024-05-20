@@ -2,6 +2,7 @@ package com.example.educa.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -54,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -62,6 +64,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.educa.database.repository.AcademicEducationRepository
+import com.example.educa.database.repository.ExperienceRepository
+import com.example.educa.database.repository.InterestRepository
+import com.example.educa.database.repository.SkillRepository
+import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import java.util.Date
@@ -318,42 +325,17 @@ fun RegisterComponent(
                     }
 
                     "aboutYouProfessional" -> {
-//                        TODO: Guardar essas listas no banco e puxar de lá
-                        val listAreaOfInterest by remember {
-                            mutableStateOf(
-                                arrayOf(
-                                    "Técnologia",
-                                    "Inovação",
-                                    "Negócios",
-                                    "Artes",
-                                    "Cultura",
-                                    "Ciências",
-                                    "Pesquisa",
-                                    "Saúde",
-                                    "Bem-estar",
-                                    "Educação",
-                                    "Ensino",
-                                    "Sustentabilidade",
-                                    "Meio Ambiente"
-                                )
-                            )
+                        val context = LocalContext.current
+                        val interestRepository = InterestRepository(context)
+
+                        var listAreaOfInterest by remember {
+                            mutableStateOf(interestRepository.listInterests())
                         }
-                        val listAcademicEducation = arrayOf(
-                            "Engenharia de Software",
-                            "Administração",
-                            "Nenhuma",
-                            "Medicina",
-                            "Psicologia",
-                            "Arquitetura",
-                            "Economia",
-                            "Ciência da Computação",
-                            "Design Gráfico",
-                            "Marketing Digital",
-                            "Direito",
-                            "Engenharia Civil",
-                            "Biologia",
-                            "Outros"
-                        )
+
+                        val academicEducationRepository = AcademicEducationRepository(context)
+                        val listAcademicEducation by remember {
+                            mutableStateOf(academicEducationRepository.listAcademicEducation())
+                        }
 
                         val tempList = listOf<Int>()
 
@@ -375,7 +357,7 @@ fun RegisterComponent(
 
 
                             FlowRow {
-                                listAreaOfInterest.forEachIndexed { index, s ->
+                                listAreaOfInterest.forEachIndexed { index, interest ->
                                     Box(modifier = Modifier.padding(horizontal = 2.dp)) {
 
                                         FilterChip(
@@ -392,7 +374,7 @@ fun RegisterComponent(
                                             },
                                             label = {
                                                 Text(
-                                                    text = s,
+                                                    text = interest.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -438,7 +420,7 @@ fun RegisterComponent(
                                             },
                                             label = {
                                                 Text(
-                                                    text = s,
+                                                    text = s.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -458,37 +440,18 @@ fun RegisterComponent(
                     }
 
                     "aboutYouPersonal" -> {
-                        val listOfSkills = arrayOf(
-                            "Comunicação",
-                            "Resolução de Problemas",
-                            "Liderança",
-                            "Nenhuma",
-                            "Pensamento Crítico",
-                            "Criatividade",
-                            "Gerenciamento de Tempo",
-                            "Trabalho em Equipe",
-                            "Adaptação a Mudanças",
-                            "Outros"
-                        )
-                        val listOfExperiences = arrayOf(
-                            "Trabalho Voluntário",
-                            "Estágios",
-                            "Nenhuma",
-                            "Projetos de Pesquisa",
-                            "Intercâmbio",
-                            "Atividades Extracurriculares",
-                            "Seminários",
-                            "Publicações Acadêmicas",
-                            "Graduação",
-                            "Pós-graduação",
-                            "Publicações Acadêmicas",
-                            "Iniciação científica",
-                            "Conferências",
-                            "Empresas",
-                            "Conferências",
-                            "Outros",
-                        )
+                        val context = LocalContext.current
+                        val skillRepository = SkillRepository(context)
 
+                        val listOfSkills by remember {
+                            mutableStateOf(skillRepository.listSkills())
+                        }
+
+                        val experienceRepository = ExperienceRepository(context)
+                        val listOfExperiences by remember {
+                            mutableStateOf(experienceRepository.listExperience())
+                        }
+//
                         val tempList = listOf<Int>()
 
                         var multipleSkillsChecked by remember {
@@ -526,7 +489,7 @@ fun RegisterComponent(
                                             },
                                             label = {
                                                 Text(
-                                                    text = s,
+                                                    text = s.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -566,7 +529,7 @@ fun RegisterComponent(
                                             },
                                             label = {
                                                 Text(
-                                                    text = s,
+                                                    text = s.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )

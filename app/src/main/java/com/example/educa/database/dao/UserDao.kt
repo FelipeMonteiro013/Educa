@@ -1,5 +1,6 @@
 package com.example.educa.database.dao
 
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,4 +23,8 @@ interface UserDao {
 
     @Query("SELECT * FROM tbl_user")
     fun listUsers() : List<User>
+
+    @Query("SELECT * FROM tbl_user")
+    fun checkDb() : Boolean
+
 }

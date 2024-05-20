@@ -24,7 +24,6 @@ import com.example.educa.ui.theme.EducaTheme
 class MainActivity : ComponentActivity() {
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,8 +37,11 @@ class MainActivity : ComponentActivity() {
                         composable("login") { LoginScreen(navController) }
                         composable("welcome") { WelcomeScreen(navController) }
                         composable("register_email") { RegisterEmailScreen(navController) }
-                        composable("home") {HomeScreen(navController)}
-                        composable("user_information") { UserInformationScreen(navController) }
+                        composable("home") { HomeScreen(navController) }
+                        composable("user_information/{id}") {
+                            val id = it.arguments?.getString("id")
+                            UserInformationScreen(navController, id!!)
+                        }
                         composable("discovery_tweaks") { DiscoveryTweaksScreen(navController) }
                     }
                 }

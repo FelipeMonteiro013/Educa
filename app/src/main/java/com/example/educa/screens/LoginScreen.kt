@@ -35,41 +35,34 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.educa.database.repository.LikeRepository
 import com.example.educa.database.repository.UserRepository
-import com.example.educa.model.User
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import com.example.educa.ui.theme.TextColor
 
 
 @Composable
-fun createMock(modifier: Modifier = Modifier) {
-    val mockUser = User(
-        id = 0,
-        name = "Fulano da Silva",
-        email = "fulano@email.com",
-        password = "123",
-        dtNasc = "Tue Oct 05 22:00:00 GMT-03:00 1999",
-        distance = 5,
-        gender = "H",
-        accountType = 0,
-        interest = listOf(0,1,2,3),
-        academicEducation = listOf(0,1,2,3),
-        skills = listOf(0,1,2,3),
-        experiences = listOf(0,1,2,3),
-        userPhoto = "https://www.psicologavalinhos.com.br/_libs/imgs/final/11.jpg",
-    )
-
+fun CheckDb(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-
     val userRepository = UserRepository(context)
-    userRepository.create(mockUser)
+    userRepository.checkDb()
+}
+
+@Composable
+fun CreateMatches () {
+    val context = LocalContext.current
+    val createMatches = LikeRepository(context)
+
+
+//    createMatches.create(Likes(0, 0, null, 1, true))
 }
 
 @Composable
 fun LoginScreen(navController: NavController) {
 
-    createMock()
+    CheckDb()
+    CreateMatches()
 
     var emailField by remember {
         mutableStateOf("")

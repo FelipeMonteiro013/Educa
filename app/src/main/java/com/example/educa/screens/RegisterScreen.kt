@@ -342,7 +342,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
 
                             val isCreated = userRepository.create(user)
 
-                            if (isCreated.toString().isNotEmpty()) navController.navigate("login")
+                            if (isCreated.toString().isNotEmpty()) navController.navigate("home")
                         },
                         backStep = {
                             currentProgress -= 10F
