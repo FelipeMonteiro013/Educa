@@ -3,8 +3,6 @@ package com.example.educa.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.educa.model.AcademicEducation
-import com.example.educa.model.Interest
 import com.example.educa.model.Skill
 
 @Dao

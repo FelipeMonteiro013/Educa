@@ -43,7 +43,7 @@ import com.example.educa.ui.theme.TextColor
 
 
 @Composable
-fun CheckDb(modifier: Modifier = Modifier) {
+fun CheckDb() {
     val context = LocalContext.current
     val userRepository = UserRepository(context)
     userRepository.checkDb()

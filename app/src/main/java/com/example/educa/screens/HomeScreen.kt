@@ -1,6 +1,5 @@
 package com.example.educa.screens
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,15 +57,6 @@ import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import com.example.educa.ui.theme.SuccessColor
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import java.util.Date
-import java.util.Locale
 
 //                        TODO: Organizar essa função
 fun getAgeFormat(dtNasc: String): Long {

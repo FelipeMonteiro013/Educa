@@ -2,7 +2,6 @@ package com.example.educa.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -54,7 +53,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -68,7 +66,6 @@ import com.example.educa.database.repository.AcademicEducationRepository
 import com.example.educa.database.repository.ExperienceRepository
 import com.example.educa.database.repository.InterestRepository
 import com.example.educa.database.repository.SkillRepository
-import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import java.util.Date

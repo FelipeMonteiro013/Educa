@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.educa.model.AcademicEducation
-import com.example.educa.model.Interest
 
 @Dao
 interface AcademicEducationDao {
