@@ -1,5 +1,6 @@
 package com.example.educa.screens
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.educa.database.repository.LikeRepository
 import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
@@ -49,27 +49,21 @@ fun CheckDb() {
     userRepository.checkDb()
 }
 
-@Composable
-fun CreateMatches () {
-    val context = LocalContext.current
-    val createMatches = LikeRepository(context)
-
-
-//    createMatches.create(Likes(0, 0, null, 1, true))
-}
 
 @Composable
 fun LoginScreen(navController: NavController) {
 
+    val contex = LocalContext.current
+    val userRepository = UserRepository(context = contex)
+
     CheckDb()
-    CreateMatches()
 
     var emailField by remember {
-        mutableStateOf("")
+        mutableStateOf("fulano@email.com")
     }
 
     var passwordField by remember {
-        mutableStateOf("")
+        mutableStateOf("123")
     }
 
     var passwordVisible by remember {
@@ -84,7 +78,12 @@ fun LoginScreen(navController: NavController) {
             .padding(horizontal = 20.dp)
     ) {
         Row {
-            Text(text = "Educa", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Primary)
+            Text(
+                text = "Educa",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = Primary
+            )
             Text(text = "+", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Secondary)
         }
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -133,7 +132,18 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
         Button(
             onClick = {
-                navController.navigate("home")
+                try {
+                    val loggedUserId = userRepository.login(emailField, passwordField)
+
+                    if (loggedUserId > 0) {
+                        navController.navigate("home/${loggedUserId}")
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("TESTE", e.message.toString())
+                }
+
+
             },
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Primary),
@@ -167,5 +177,6 @@ fun LoginScreen(navController: NavController) {
                 navController.navigate("welcome")
             }
         )
+
     }
 }

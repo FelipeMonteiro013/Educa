@@ -11,4 +11,13 @@ class LikeRepository(context: Context) {
         return db.insert(like)
     }
 
+    fun getPossibleLike(userId: Long) : Like {
+        return db.getPossibleLike(userId)
+    }
+
+    fun like(like: Like){
+        return db.like(like)
+    }
+
+
 }

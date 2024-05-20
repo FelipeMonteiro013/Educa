@@ -40,8 +40,6 @@ fun UserInformationScreen(navController: NavController, id: String) {
         mutableStateOf(userRepository.getUserById(id.toLong()))
     }
 
-    Log.i("TESTE", userData.toString())
-
     Column(
         modifier = Modifier
             .fillMaxSize()

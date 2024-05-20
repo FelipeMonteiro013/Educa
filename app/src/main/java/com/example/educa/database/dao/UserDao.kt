@@ -1,5 +1,6 @@
 package com.example.educa.database.dao
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,6 +12,9 @@ import com.example.educa.model.User
 interface UserDao {
     @Insert
     fun create(user: User) : Long
+
+    @Insert
+    fun insertAll(listUsers: List<User>) : List<Long>
 
     @Update
     fun update(user: User) : Int
@@ -27,4 +31,6 @@ interface UserDao {
     @Query("SELECT * FROM tbl_user")
     fun checkDb() : Boolean
 
+    @Query("SELECT * FROM tbl_user WHERE email = :email AND password = :password")
+    fun login(email: String, password: String) : Long
 }

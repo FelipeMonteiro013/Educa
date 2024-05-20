@@ -6,24 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -38,25 +30,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.ImageLoader
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.educa.R
+import com.example.educa.components.CardMatchComponent
+import com.example.educa.database.repository.LikeRepository
 import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
-import com.example.educa.ui.theme.SuccessColor
 
 //                        TODO: Organizar essa função
 fun getAgeFormat(dtNasc: String): Long {
@@ -77,7 +62,6 @@ fun getAgeFormat(dtNasc: String): Long {
 
         // Calcular a idade
 //        val age = ChronoUnit.YEARS.between(birthDate, currentDate)
-        Log.i("TESTE", dtNasc)
         return 1
 
     } catch (e: Exception) {
@@ -87,7 +71,13 @@ fun getAgeFormat(dtNasc: String): Long {
 }
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, loggedUserId: String) {
+
+    val context = LocalContext.current
+    val userRepository = UserRepository(context = context)
+    val loggedUser = userRepository.getUserById(loggedUserId.toLong())
+
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -107,16 +97,10 @@ fun HomeScreen(navController: NavController) {
             Row {
 
                 Text(
-                    text = "Educa",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Primary
+                    text = "Educa", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Primary
                 )
                 Text(
-                    text = "+",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Secondary
+                    text = "+", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Secondary
                 )
             }
             IconButton(onClick = {
@@ -136,163 +120,50 @@ fun HomeScreen(navController: NavController) {
         val context = LocalContext.current
         val userRepository = UserRepository(context)
 
+        var listCardController by remember {
+            mutableStateOf(0)
+        }
 
-        val listUsersState = remember {
+        val listUsersState by remember {
             mutableStateOf(userRepository.listUsers())
         }
 
-        Box {
+        if (listCardController < listUsersState.size) {
+            CardMatchComponent(user = listUsersState[listCardController], isLike = {
+                val likeRepository = LikeRepository(context)
+                val response =
+                    likeRepository.getPossibleLike(listUsersState[listCardController].id)
 
+                response.loggedUserId = loggedUser.id
+                response.loggedUserLike = true
 
-            for (user in listUsersState.value) {
+                likeRepository.like(response)
 
+                listCardController++
+            }, isNotLike = {
+                val likeRepository = LikeRepository(context)
+                val response =
+                    likeRepository.getPossibleLike(listUsersState[listCardController].id)
 
-//            TODO: Esse cara vai virar um componente
-                Card(
-                    modifier = Modifier
-                        .height(650.dp)
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    elevation = CardDefaults.elevatedCardElevation()
+                response.loggedUserId = loggedUser.id
+                response.loggedUserLike = false
 
-                ) {
+                likeRepository.like(response)
 
+                listCardController++
 
-                    Box(
-                        contentAlignment = Alignment.BottomStart,
-                        modifier = Modifier.background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black
-                                ), startY = 800.0F
-                            )
-                        )
-                    ) {
+            })
+        } else {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
 
-
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(user.userPhoto)
-                                .build(),
-                            contentDescription = null,
-                            imageLoader = ImageLoader(context),
-                            contentScale = ContentScale.FillHeight,
-                            error = painterResource(R.drawable.baseline_image_not_supported_24),
-                            modifier = Modifier.fillMaxSize()
-                        )
-
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(Color.Transparent, Color.Black),
-                                        startY = 0.0F,
-                                        endY = 400.0F
-                                    )
-                                )
-                        ) {
-
-
-                            Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            ) {
-                                Text(
-                                    text = user.name,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 32.sp
-                                )
-
-
-//                            Text(
-//                                text = getAgeFormat(user.dtNasc).toString(),
-////                                text = dateFormat(user.dtNasc).toString(),
-//                                color = Color.White,
-//                                fontSize = 32.sp,
-//                                modifier = Modifier.padding(start = 10.dp)
-//                            )
-                            }
-
-                            Text(
-                                text = if (user.accountType == 0) "Aluno(a)" else "Professor(a)",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp, modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                            Text(
-                                text = "a ${user.distance} km de distância",
-                                color = Color.White,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceAround,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = Modifier
-                                        .size(60.dp)
-                                        .clip(RoundedCornerShape(60.dp))
-                                        .background(Color.White)
-
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Close,
-                                        contentDescription = null,
-                                        Modifier.size(40.dp),
-                                        tint = Color.Red
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { navController.navigate("user_information/${user.id}") },
-                                    modifier = Modifier
-                                        .size(60.dp)
-                                        .clip(RoundedCornerShape(60.dp))
-                                        .background(Color.White)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Info,
-                                        contentDescription = null,
-                                        Modifier
-                                            .size(40.dp),
-                                        tint = Primary
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = Modifier
-                                        .size(60.dp)
-                                        .clip(RoundedCornerShape(60.dp))
-                                        .background(Color.White)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.MenuBook,
-                                        contentDescription = null,
-                                        Modifier
-                                            .size(40.dp),
-                                        tint = SuccessColor
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                        }
-
-
-                    }
-
-
-                }
-
+                Text(text = "Acabou!")
             }
-
-
         }
+
         var selectedItem by remember { mutableIntStateOf(0) }
 
 //        Footer
@@ -323,8 +194,7 @@ fun HomeScreen(navController: NavController) {
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            Icons.Outlined.Notifications,
-                            contentDescription = "Notificações"
+                            Icons.Outlined.Notifications, contentDescription = "Notificações"
                         )
                     },
                     selected = selectedItem == 2,
@@ -339,8 +209,7 @@ fun HomeScreen(navController: NavController) {
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            Icons.Outlined.AccountCircle,
-                            contentDescription = "Perfil"
+                            Icons.Outlined.AccountCircle, contentDescription = "Perfil"
                         )
                     },
                     selected = selectedItem == 3,

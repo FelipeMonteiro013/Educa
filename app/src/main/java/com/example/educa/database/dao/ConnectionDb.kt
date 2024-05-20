@@ -1,6 +1,7 @@
 package com.example.educa.database.dao
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -143,7 +144,7 @@ abstract class ConnectionDb : RoomDatabase() {
                     val userDao = getDatabase(context).userDao()
                     val likeDao = getDatabase(context).likeDao()
 
-                    val createdUserId = userDao.create(
+                    val listMockUsers = listOf(
                         User(
                             name = "Fulano da Silva",
                             email = "fulano@email.com",
@@ -157,10 +158,82 @@ abstract class ConnectionDb : RoomDatabase() {
                             skills = listOf(8, 9, 10, 11),
                             experiences = listOf(12, 13, 14, 15),
                             userPhoto = "https://www.psicologavalinhos.com.br/_libs/imgs/final/11.jpg",
+                        ),
+                        User(
+                            name = "Ciclano de Souza",
+                            email = "ciclano2@email.com",
+                            password = "456",
+                            dtNasc = "Mon Mar 12 15:30:00 GMT 1998",
+                            distance = 10,
+                            gender = "H",
+                            accountType = 1,
+                            interest = listOf(0, 2, 3, 4),
+                            academicEducation = listOf(5, 6, 7, 8),
+                            skills = listOf(9, 10, 11, 12),
+                            experiences = listOf(13, 14, 15, 16),
+                            userPhoto = "https://marista.edu.br/wp-content/uploads/2022/07/EF1.png"
+                        ),
+                        User(
+                            name = "Beltrano Pereira",
+                            email = "beltrano3@email.com",
+                            password = "789",
+                            dtNasc = "Fri Nov 23 08:45:00 GMT 1997",
+                            distance = 15,
+                            gender = "H",
+                            accountType = 1,
+                            interest = listOf(1, 2, 4, 5),
+                            academicEducation = listOf(6, 7, 8, 9),
+                            skills = listOf(10, 11, 12, 13),
+                            experiences = listOf(14, 15, 16, 17),
+                            userPhoto = "https://cer.sebrae.com.br/wp-content/uploads/2022/12/GettyImages-1408304021.jpg"
+                        ),
+                        User(
+                            name = "Maria da Silva",
+                            email = "maria4@email.com",
+                            password = "abc",
+                            dtNasc = "Sun Jan 14 20:00:00 GMT 2000",
+                            distance = 20,
+                            gender = "F",
+                            accountType = 0,
+                            interest = listOf(0, 3, 5, 6),
+                            academicEducation = listOf(4, 6, 8, 10),
+                            skills = listOf(8, 10, 12, 14),
+                            experiences = listOf(12, 14, 16, 18),
+                            userPhoto = "https://escolasexponenciais.com.br/wp-content/uploads/2022/04/menina-1.png"
+                        ),
+                        User(
+                            name = "Ana de Souza",
+                            email = "ana5@email.com",
+                            password = "def",
+                            dtNasc = "Thu May 17 11:15:00 GMT 1996",
+                            distance = 25,
+                            gender = "F",
+                            accountType = 1,
+                            interest = listOf(1, 3, 4, 6),
+                            academicEducation = listOf(5, 7, 9, 11),
+                            skills = listOf(9, 11, 13, 15),
+                            experiences = listOf(13, 15, 17, 19),
+                            userPhoto = "https://thumbs.dreamstime.com/b/retrato-da-professora-usando-laptop-sentada-%C3%A0-mesa-na-sala-de-aula-e-298200036.jpg"
                         )
                     )
 
-                    likeDao.insert(Like(0, null, null, userId = createdUserId, userLike = Random.nextBoolean()))
+                    val listCreatedUserId = userDao.insertAll(listMockUsers)
+
+                    listCreatedUserId.forEachIndexed { _, userId ->
+
+                        likeDao.insert(
+                            Like(
+                                0,
+                                null,
+                                null,
+                                userId = userId,
+                                userLike = Random.nextBoolean()
+                            )
+                        )
+                    }
+
+
+
 
 
                 }

@@ -47,7 +47,6 @@ fun InformationCardComponent(title: String, list: List<Int>) {
             list.forEachIndexed { index, s ->
                 var x = interestRepository.getInterest(1)
 
-                Log.i("TESTE", x.toString())
             }
 
             FlowRow {

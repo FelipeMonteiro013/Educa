@@ -24,5 +24,9 @@ class UserRepository(context: Context) {
         return db.checkDb()
     }
 
+    fun login(email: String, password: String): Long{
+        return db.login(email, password);
+    }
+
 
 }

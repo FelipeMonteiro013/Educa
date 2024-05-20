@@ -37,7 +37,10 @@ class MainActivity : ComponentActivity() {
                         composable("login") { LoginScreen(navController) }
                         composable("welcome") { WelcomeScreen(navController) }
                         composable("register_email") { RegisterEmailScreen(navController) }
-                        composable("home") { HomeScreen(navController) }
+                        composable("home/{loggedUserId}") {
+                            val loggedUserId = it.arguments?.getString("loggedUserId")
+                            HomeScreen(navController, loggedUserId!!)
+                        }
                         composable("user_information/{id}") {
                             val id = it.arguments?.getString("id")
                             UserInformationScreen(navController, id!!)
