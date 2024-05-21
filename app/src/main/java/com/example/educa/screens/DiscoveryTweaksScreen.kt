@@ -1,5 +1,6 @@
 package com.example.educa.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,13 @@ import com.example.educa.ui.theme.Secondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiscoveryTweaksScreen(navController: NavController, loggedUserId: String) {
+fun DiscoveryTweaksScreen(
+    navController: NavController,
+    loggedUserId: String,
+    listCardController: String
+) {
+
+    Log.i("TESTE", "listCardController: $listCardController")
 
     var sliderPosition by remember { mutableFloatStateOf(1f) }
 
@@ -45,7 +52,7 @@ fun DiscoveryTweaksScreen(navController: NavController, loggedUserId: String) {
 
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.navigate("home/${loggedUserId}") }) {
+            IconButton(onClick = { navController.navigate("home/${loggedUserId}?listCardController=$listCardController") }) {
 
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,

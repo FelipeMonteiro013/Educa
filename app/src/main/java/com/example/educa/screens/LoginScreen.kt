@@ -54,13 +54,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 @Composable
-fun CheckDb() {
-    val context = LocalContext.current
-    val userRepository = UserRepository(context)
-    userRepository.checkDb()
-}
 
-fun populateDatabase(context: Context) {
+fun PopulateDatabase(context: Context) {
     val interestRepository = InterestRepository(context)
     val academicEducationRepository = AcademicEducationRepository(context)
     val skillRepository = SkillRepository(context)
@@ -166,7 +161,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(3, 4, 7),
                 skills = listOf(1, 6, 7),
                 experiences = listOf(5, 6, 10),
-                userPhoto = "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?t=st=1716268593~exp=1716272193~hmac=95d026c1abcfc0474670cd581a9440ee7c0ac93c7b17a3766c0ec3ca0e75cff6&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg",
             ),
             User(
                 name = "Bruno Lima",
@@ -180,7 +175,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 2, 5),
                 skills = listOf(3, 8, 10),
                 experiences = listOf(1, 4, 7),
-                userPhoto = "https://img.freepik.com/fotos-gratis/retrato-de-estudante-do-sexo-masculino-encantado-hipster-com-cabelos-nitidos_176532-8157.jpg?t=st=1716268746~exp=1716272346~hmac=33cd8bd0d02bf09860e96477f99c546d5f50e84d7deacc080756ad797e22a209&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/retrato-de-estudante-do-sexo-masculino-encantado-hipster-com-cabelos-nitidos_176532-8157.jpg",
             ),
             User(
                 name = "Carla Souza",
@@ -194,7 +189,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(2, 3, 6),
                 skills = listOf(4, 5, 9),
                 experiences = listOf(3, 8, 12),
-                userPhoto = "https://img.freepik.com/fotos-gratis/mulher-de-tiro-medio-com-papelada_23-2150379181.jpg?t=st=1716268852~exp=1716272452~hmac=2c86a87d444defa0abfda631adaa890eb741d37e2b92b341e95089c66aedb6e6&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/mulher-de-tiro-medio-com-papelada_23-2150379181.jpg",
             ),
             User(
                 name = "Diego Martins",
@@ -208,7 +203,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 5, 7),
                 skills = listOf(2, 7, 10),
                 experiences = listOf(6, 9, 11),
-                userPhoto = "https://img.freepik.com/fotos-gratis/cara-positivo-em-jaqueta-jeans-piscando-na-parede-rosa_197531-23607.jpg?t=st=1716269155~exp=1716272755~hmac=237b13bf91545c9ba4a2e501f2b38520407a4faad1f4eb567539889b6f51320e&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/cara-positivo-em-jaqueta-jeans-piscando-na-parede-rosa_197531-23607.jpg",
             ),
             User(
                 name = "Elena Santos",
@@ -222,7 +217,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(4, 6, 8),
                 skills = listOf(1, 4, 10),
                 experiences = listOf(5, 7, 13),
-                userPhoto = "https://img.freepik.com/fotos-gratis/estudante-de-sorriso-novo-ou-estagiario-nos-monoculos-que-estao-com-uma-pasta-na-parede-vermelha_158595-4958.jpg?t=st=1716269223~exp=1716272823~hmac=68a961feff1cff11f8ffa731975c11d0c40f13717dd6f4c972a9917ee91e2ca3&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/estudante-de-sorriso-novo-ou-estagiario-nos-monoculos-que-estao-com-uma-pasta-na-parede-vermelha_158595-4958.jpg",
             ),
             User(
                 name = "Fabio Oliveira",
@@ -236,7 +231,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(3, 5, 7),
                 skills = listOf(2, 5, 9),
                 experiences = listOf(1, 8, 12),
-                userPhoto = "https://img.freepik.com/fotos-gratis/adolescente-atraente-e-alegre-posando-contra-a-parede-branca_176420-32502.jpg?t=st=1716269373~exp=1716272973~hmac=0b081af98ea635157aadba59e8c536f01d5f38e3a0c75ac567967f1e3de38043&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/adolescente-atraente-e-alegre-posando-contra-a-parede-branca_176420-32502.jpg",
             ),
             User(
                 name = "Gabriela Silva",
@@ -250,7 +245,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(2, 4, 6),
                 skills = listOf(3, 6, 8),
                 experiences = listOf(2, 9, 10),
-                userPhoto = "https://img.freepik.com/fotos-gratis/professora-jovem-sentada-na-mesa-da-escola-na-frente-do-quadro-negro-na-sala-de-aula-verificando-a-licao-de-casa-dos-alunos-olhando-para-a-camera-feliz-e-satisfeito-sorrindo_141793-139226.jpg?t=st=1716269463~exp=1716273063~hmac=be51b3c0bb5dc96e2397b650ff0e202ab00c88f17660c6347cc47f0445ea863b&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/professora-jovem-sentada-na-mesa-da-escola-na-frente-do-quadro-negro-na-sala-de-aula-verificando-a-licao-de-casa-dos-alunos-olhando-para-a-camera-feliz-e-satisfeito-sorrindo_141793-139226.jpg",
             ),
             User(
                 name = "Henrique Costa",
@@ -264,7 +259,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 3, 7),
                 skills = listOf(4, 7, 10),
                 experiences = listOf(1, 5, 11),
-                userPhoto = "https://img.freepik.com/fotos-gratis/garoto-alegre-em-oculos-elegantes-em-pe-contra-o-fundo-branco_259150-59784.jpg?t=st=1716269630~exp=1716273230~hmac=e37b1eeeefd530b56a43ec187f6370eca07cb33edab5f18c1aeacbee98e20f23&w=740",
+                userPhoto = "https://img.freepik.com/fotos-gratis/garoto-alegre-em-oculos-elegantes-em-pe-contra-o-fundo-branco_259150-59784.jpg",
             ),
             User(
                 name = "João Almeida",
@@ -278,7 +273,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 4, 7),
                 skills = listOf(3, 5, 8),
                 experiences = listOf(1, 6, 10),
-                userPhoto = "https://img.freepik.com/fotos-gratis/jovem-hispanico-sorrindo-usando-fones-de-ouvido-no-campus-da-universidade_839833-11696.jpg?t=st=1716269762~exp=1716273362~hmac=c5430a6ccb27c85b071a5c32de172ef9a332617ac3d865ac70dbf49a75ad1803&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/jovem-hispanico-sorrindo-usando-fones-de-ouvido-no-campus-da-universidade_839833-11696.jpg",
             ),
             User(
                 name = "Lucas Pereira",
@@ -292,7 +287,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 6, 7),
                 skills = listOf(2, 5, 10),
                 experiences = listOf(1, 7, 11),
-                userPhoto = "https://img.freepik.com/fotos-gratis/jovem-hispanico-sorrindo-feliz-sentado-no-sofa-em-casa_839833-15776.jpg?t=st=1716269843~exp=1716273443~hmac=0b753d0d1e80d5f5df1b5f1d0845dc15dfcefacae962e8dafe7ce2c0f52ccb49&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/jovem-hispanico-sorrindo-feliz-sentado-no-sofa-em-casa_839833-15776.jpg",
             ),
             User(
                 name = "Mariana Rocha",
@@ -306,7 +301,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(2, 4, 6),
                 skills = listOf(3, 6, 8),
                 experiences = listOf(2, 9, 10),
-                userPhoto = "https://img.freepik.com/fotos-gratis/vista-frontal-da-sorridente-empresaria-falando-ao-telefone-enquanto-toma-um-cafe_23-2148788855.jpg?t=st=1716269934~exp=1716273534~hmac=2383b2b9389206412fe005436c261767ab3bfa23f8e28cb227c9d02d6b666053&w=740",
+                userPhoto = "https://img.freepik.com/fotos-gratis/vista-frontal-da-sorridente-empresaria-falando-ao-telefone-enquanto-toma-um-cafe_23-2148788855.jpg",
             ),
             User(
                 name = "Nicolas Fernandes",
@@ -320,7 +315,7 @@ fun populateDatabase(context: Context) {
                 academicEducation = listOf(1, 5, 7),
                 skills = listOf(4, 7, 9),
                 experiences = listOf(1, 6, 11),
-                userPhoto = "https://img.freepik.com/fotos-gratis/adolescente-hispanico-usando-mochila-de-estudante-e-segurando-livros-sorrindo-olhando-para-o-lado-e-olhando-para-longe-pensando_839833-3181.jpg?t=st=1716269992~exp=1716273592~hmac=0c6599c0968a5144d33661023928d58620e65550d794a33eec25965c7382328a&w=1380",
+                userPhoto = "https://img.freepik.com/fotos-gratis/adolescente-hispanico-usando-mochila-de-estudante-e-segurando-livros-sorrindo-olhando-para-o-lado-e-olhando-para-longe-pensando_839833-3181.jpg",
             ),
         )
 
@@ -332,8 +327,7 @@ fun populateDatabase(context: Context) {
 @Composable
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
-    populateDatabase(context = context)
-    CheckDb()
+    PopulateDatabase(context = context)
 
     val userRepository = UserRepository(context = context)
 

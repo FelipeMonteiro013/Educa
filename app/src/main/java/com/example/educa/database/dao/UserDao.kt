@@ -1,6 +1,5 @@
 package com.example.educa.database.dao
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -28,8 +27,8 @@ interface UserDao {
     @Query("SELECT * FROM tbl_user")
     fun listUsers() : List<User>
 
-    @Query("SELECT * FROM tbl_user")
-    fun checkDb() : Boolean
+    @Query("SELECT * FROM tbl_user WHERE id != :loggedUserId")
+    fun listUsersDiferentLoggedUser(loggedUserId: Long) : List<User>
 
     @Query("SELECT * FROM tbl_user WHERE email = :email AND password = :password")
     fun login(email: String, password: String) : Long

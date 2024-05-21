@@ -70,9 +70,10 @@ class MainActivity : ComponentActivity() {
                             listCardController!!
                         )
                     }
-                    composable("discovery_tweaks/{loggedUserId}") {
+                    composable("discovery_tweaks/{loggedUserId}?listCardController={listCardController}") {
                         val loggedUserId = it.arguments?.getString("loggedUserId")
-                        DiscoveryTweaksScreen(navController, loggedUserId!!)
+                        val listCardController = it.arguments?.getString("listCardController")
+                        DiscoveryTweaksScreen(navController, loggedUserId!!, listCardController!!)
                     }
                 }
             }

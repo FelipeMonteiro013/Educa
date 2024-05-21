@@ -2,6 +2,7 @@ package com.example.educa.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -325,7 +326,7 @@ fun RegisterComponent(
                         val context = LocalContext.current
                         val interestRepository = InterestRepository(context)
 
-                        var listAreaOfInterest by remember {
+                        val listAreaOfInterest by remember {
                             mutableStateOf(interestRepository.listInterests())
                         }
 
@@ -354,19 +355,23 @@ fun RegisterComponent(
 
 
                             FlowRow {
-                                listAreaOfInterest.forEachIndexed { index, interest ->
+                                for (interest in listAreaOfInterest) {
                                     Box(modifier = Modifier.padding(horizontal = 2.dp)) {
 
                                         FilterChip(
-                                            selected = multipleInterestChecked.contains(index),
+                                            selected = multipleInterestChecked.contains(interest.id),
                                             onClick = {
                                                 multipleInterestChecked =
-                                                    if (multipleInterestChecked.contains(index)) {
-                                                        multipleInterestChecked.minus(index)
+                                                    if (multipleInterestChecked.contains(interest.id)) {
+                                                        multipleInterestChecked.minus(interest.id)
                                                     } else {
-                                                        multipleInterestChecked.plus(index)
+                                                        multipleInterestChecked.plus(interest.id)
                                                     }
 
+                                                Log.i(
+                                                    "TESTE",
+                                                    "multipleInterestChecked: $multipleInterestChecked"
+                                                )
                                                 updateInterestCheckedList(multipleInterestChecked)
                                             },
                                             label = {
@@ -394,30 +399,38 @@ fun RegisterComponent(
                                 color = Secondary
                             )
                             FlowRow {
-                                listAcademicEducation.forEachIndexed { index, s ->
-                                    Box(modifier = Modifier.padding(horizontal = 2.dp)) {
 
+                                for (academicEducation in listAcademicEducation) {
+                                    Box(modifier = Modifier.padding(horizontal = 2.dp)) {
                                         FilterChip(
                                             selected = multipleAcademicEducationChecked.contains(
-                                                index
+                                                academicEducation.id
                                             ),
                                             onClick = {
                                                 multipleAcademicEducationChecked =
                                                     if (multipleAcademicEducationChecked.contains(
-                                                            index
+                                                            academicEducation.id
                                                         )
                                                     ) {
-                                                        multipleAcademicEducationChecked.minus(index)
+                                                        multipleAcademicEducationChecked.minus(
+                                                            academicEducation.id
+                                                        )
                                                     } else {
-                                                        multipleAcademicEducationChecked.plus(index)
+                                                        multipleAcademicEducationChecked.plus(
+                                                            academicEducation.id
+                                                        )
                                                     }
+                                                Log.i(
+                                                    "TESTE",
+                                                    "multipleInterestChecked: $multipleAcademicEducationChecked"
+                                                )
                                                 updateAcademicEducationCheckedList(
                                                     multipleAcademicEducationChecked
                                                 )
                                             },
                                             label = {
                                                 Text(
-                                                    text = s.title,
+                                                    text = academicEducation.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -430,9 +443,9 @@ fun RegisterComponent(
                                             shape = RoundedCornerShape(20.dp)
                                         )
                                     }
+
                                 }
                             }
-
                         }
                     }
 
@@ -448,7 +461,6 @@ fun RegisterComponent(
                         val listOfExperiences by remember {
                             mutableStateOf(experienceRepository.listExperience())
                         }
-//
                         val tempList = listOf<Int>()
 
                         var multipleSkillsChecked by remember {
@@ -470,23 +482,27 @@ fun RegisterComponent(
 
 
                             FlowRow {
-                                listOfSkills.forEachIndexed { index, s ->
-                                    Box(modifier = Modifier.padding(horizontal = 2.dp)) {
 
+                                for (skill in listOfSkills) {
+                                    Box(modifier = Modifier.padding(horizontal = 2.dp)) {
                                         FilterChip(
-                                            selected = multipleSkillsChecked.contains(index),
+                                            selected = multipleSkillsChecked.contains(skill.id.toInt()),
                                             onClick = {
                                                 multipleSkillsChecked =
-                                                    if (multipleSkillsChecked.contains(index)) {
-                                                        multipleSkillsChecked.minus(index)
+                                                    if (multipleSkillsChecked.contains(skill.id.toInt())) {
+                                                        multipleSkillsChecked.minus(skill.id.toInt())
                                                     } else {
-                                                        multipleSkillsChecked.plus(index)
+                                                        multipleSkillsChecked.plus(skill.id.toInt())
                                                     }
+                                                Log.i(
+                                                    "TESTE",
+                                                    "multipleInterestChecked: $multipleSkillsChecked"
+                                                )
                                                 updateSkillsCheckedList(multipleSkillsChecked)
                                             },
                                             label = {
                                                 Text(
-                                                    text = s.title,
+                                                    text = skill.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -498,6 +514,7 @@ fun RegisterComponent(
                                             ),
                                             shape = RoundedCornerShape(20.dp)
                                         )
+
                                     }
                                 }
                             }
@@ -508,25 +525,35 @@ fun RegisterComponent(
                                 color = Secondary
                             )
                             FlowRow {
-                                listOfExperiences.forEachIndexed { index, s ->
+                                for (experience in listOfExperiences) {
+
+
                                     Box(modifier = Modifier.padding(horizontal = 2.dp)) {
                                         FilterChip(
-                                            selected = multipleExperiencesChecked.contains(index),
+                                            selected = multipleExperiencesChecked.contains(
+                                                experience.id.toInt()
+                                            ),
                                             onClick = {
                                                 multipleExperiencesChecked =
-                                                    if (multipleExperiencesChecked.contains(index)) {
-                                                        multipleExperiencesChecked.minus(index)
+                                                    if (multipleExperiencesChecked.contains(
+                                                            experience.id.toInt()
+                                                        )
+                                                    ) {
+                                                        multipleExperiencesChecked.minus(experience.id.toInt())
                                                     } else {
-                                                        multipleExperiencesChecked.plus(index)
+                                                        multipleExperiencesChecked.plus(experience.id.toInt())
                                                     }
-
+                                                Log.i(
+                                                    "TESTE",
+                                                    "multipleInterestChecked: $multipleExperiencesChecked"
+                                                )
                                                 updateExperiencesCheckedList(
                                                     multipleExperiencesChecked
                                                 )
                                             },
                                             label = {
                                                 Text(
-                                                    text = s.title,
+                                                    text = experience.title,
                                                     maxLines = 1,
                                                     textAlign = TextAlign.Center
                                                 )
@@ -540,6 +567,7 @@ fun RegisterComponent(
                                         )
 
                                     }
+
                                 }
                             }
 

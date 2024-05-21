@@ -19,17 +19,17 @@ class UserRepository(context: Context) {
         return db.listUsers()
     }
 
+    fun listUsersDiferentLoggedUser(loggedUserId: Long): List<User> {
+        return db.listUsersDiferentLoggedUser(loggedUserId)
+    }
+
 
     fun getUserById(id: Long): User {
      return db.getUserById(id)
     }
 
-    fun checkDb() : Boolean {
-        return db.checkDb()
-    }
-
     fun login(email: String, password: String): Long{
-        return db.login(email, password);
+        return db.login(email, password)
     }
 
 
