@@ -2,6 +2,8 @@ package com.example.educa.screens
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,10 +49,10 @@ import com.example.educa.model.Experience
 import com.example.educa.model.Interest
 import com.example.educa.model.Skill
 import com.example.educa.model.User
+import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import com.example.educa.ui.theme.TextColor
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 @Composable
@@ -323,7 +325,12 @@ fun PopulateDatabase(context: Context) {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun simpleToastMessage() {
+    val context = LocalContext.current
+    Toast.makeText(context, "This is a Toast Message !", Toast.LENGTH_SHORT).show()
+}
+
 @Composable
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
@@ -333,11 +340,11 @@ fun LoginScreen(navController: NavController) {
 
 
     var emailField by remember {
-        mutableStateOf("bruno.lima@gmail.com")
+        mutableStateOf("")
     }
 
     var passwordField by remember {
-        mutableStateOf("bruno321")
+        mutableStateOf("")
     }
 
     var passwordVisible by remember {
@@ -349,7 +356,7 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp).background(BackgroundColor)
     ) {
         Row {
             Text(
@@ -411,13 +418,17 @@ fun LoginScreen(navController: NavController) {
 
                     if (loggedUserId > 0) {
                         navController.navigate("home/${loggedUserId}")
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Login inválido. Tente novamente.",
+                            Toast.LENGTH_LONG,
+                        ).show()
                     }
 
                 } catch (e: Exception) {
                     Log.e("TESTE", e.message.toString())
                 }
-
-
             },
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Primary),
@@ -452,4 +463,5 @@ fun LoginScreen(navController: NavController) {
             }
         )
     }
+
 }

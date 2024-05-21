@@ -2,6 +2,7 @@ package com.example.educa.screens
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -346,6 +347,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             )
 
                             val isCreated = userRepository.create(user)
+                            Toast.makeText(context, "cadastro realizado com sucesso!", Toast.LENGTH_LONG).show()
 
                             if (isCreated.toString().isNotEmpty()) navController.navigate("login")
                         },
