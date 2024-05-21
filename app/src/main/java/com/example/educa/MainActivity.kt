@@ -1,8 +1,10 @@
 package com.example.educa
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.educa.screens.DiscoveryTweaksScreen
 import com.example.educa.screens.HomeScreen
 import com.example.educa.screens.LoginScreen
@@ -25,6 +28,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 class MainActivity : ComponentActivity() {
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +47,28 @@ class MainActivity : ComponentActivity() {
                     composable("login") { LoginScreen(navController) }
                     composable("welcome") { WelcomeScreen(navController) }
                     composable("register_email") { RegisterEmailScreen(navController) }
-                    composable("home/{loggedUserId}") {
+                    composable(
+                        "home/{loggedUserId}?listCardController={listCardController}",
+                        arguments = listOf(
+                            navArgument(name = "listCardController") {
+                                defaultValue = "0"
+                            }
+                        ),
+                    ) {
                         val loggedUserId = it.arguments?.getString("loggedUserId")
-                        HomeScreen(navController, loggedUserId!!)
+                        val listCardController = it.arguments?.getString("listCardController")
+                        HomeScreen(navController, loggedUserId!!, listCardController!!)
                     }
-                    composable("user_information/{id}/{loggedUserId}") {
+                    composable("user_information/{id}/{loggedUserId}?listCardController={listCardController}") {
                         val id = it.arguments?.getString("id")
                         val loggedUserId = it.arguments?.getString("loggedUserId")
-                        UserInformationScreen(navController, id!!, loggedUserId!!)
+                        val listCardController = it.arguments?.getString("listCardController")
+                        UserInformationScreen(
+                            navController,
+                            id!!,
+                            loggedUserId!!,
+                            listCardController!!
+                        )
                     }
                     composable("discovery_tweaks/{loggedUserId}") {
                         val loggedUserId = it.arguments?.getString("loggedUserId")

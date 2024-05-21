@@ -1,10 +1,6 @@
 package com.example.educa.screens
 
-import android.Manifest
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,13 +36,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.educa.TestNotificationService
 import com.example.educa.database.repository.UserRepository
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
 import com.example.educa.ui.theme.TextColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 
 
 @Composable
@@ -61,24 +54,11 @@ fun CheckDb() {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LoginScreen(navController: NavController) {
-
-
+    CheckDb()
     val contex = LocalContext.current
     val userRepository = UserRepository(context = contex)
 
-    val postNotificationPermission =
-        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
 
-    val testNotificationService = TestNotificationService(contex)
-
-    LaunchedEffect(key1 = true) {
-        if (!postNotificationPermission.hasPermission) {
-            postNotificationPermission.launchPermissionRequest()
-        }
-
-    }
-
-    CheckDb()
 
     var emailField by remember {
         mutableStateOf("fulano@email.com")
@@ -199,8 +179,5 @@ fun LoginScreen(navController: NavController) {
                 navController.navigate("welcome")
             }
         )
-        Button(onClick = { testNotificationService.showBasicNotification() }) {
-            Text(text = "Testar notificação")
-        }
     }
 }

@@ -1,13 +1,13 @@
 package com.example.educa.screens
 
-import android.util.Log
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,20 +37,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.educa.MatchNotificationService
 import com.example.educa.components.CardMatchComponent
 import com.example.educa.database.repository.LikeRepository
 import com.example.educa.database.repository.UserRepository
+import com.example.educa.model.Like
 import com.example.educa.ui.theme.BackgroundColor
 import com.example.educa.ui.theme.Primary
 import com.example.educa.ui.theme.Secondary
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import kotlin.random.Random
 
 
-
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun HomeScreen(navController: NavController, loggedUserId: String) {
-
+fun HomeScreen(navController: NavController, loggedUserId: String, listCardController: String) {
 
     val context = LocalContext.current
+
+    val postNotificationPermission =
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+    val matchNotificationService = MatchNotificationService(context)
+
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.hasPermission) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+
+    }
+
     val userRepository = UserRepository(context = context)
     val loggedUser = userRepository.getUserById(loggedUserId.toLong())
 
@@ -93,11 +111,9 @@ fun HomeScreen(navController: NavController, loggedUserId: String) {
 
         }
 
-        val context = LocalContext.current
-        val userRepository = UserRepository(context)
 
         var listCardController by remember {
-            mutableStateOf(0)
+            mutableIntStateOf(if (listCardController.isNotEmpty()) listCardController.toInt() else 0)
         }
 
         val listUsersState by remember {
@@ -107,37 +123,49 @@ fun HomeScreen(navController: NavController, loggedUserId: String) {
         if (listCardController < listUsersState.size) {
             CardMatchComponent(user = listUsersState[listCardController], isLike = {
                 val likeRepository = LikeRepository(context)
-                val response =
-                    likeRepository.getPossibleLike(listUsersState[listCardController].id)
+                val likeId = likeRepository.insert(
+                    Like(
+                        id = 0,
+                        loggedUserId = loggedUser.id,
+                        loggedUserLike = true,
+                        userId = listUsersState[listCardController].id,
+                        userLike = Random.nextBoolean()
+                    )
+                )
 
-                response.loggedUserId = loggedUser.id
-                response.loggedUserLike = true
+                val isMatch = likeRepository.verifyMatch(likeId)
 
-                likeRepository.like(response)
+                if (isMatch) {
+                    matchNotificationService.showBasicNotification(
+                        loggedUser.name,
+                        listUsersState[listCardController].name
+                    )
+                }
 
                 listCardController++
             }, isNotLike = {
                 val likeRepository = LikeRepository(context)
-                val response =
-                    likeRepository.getPossibleLike(listUsersState[listCardController].id)
-
-                response.loggedUserId = loggedUser.id
-                response.loggedUserLike = false
-
-                likeRepository.like(response)
+                likeRepository.insert(
+                    Like(
+                        id = 0,
+                        loggedUserId = loggedUser.id,
+                        loggedUserLike = false,
+                        userId = listUsersState[listCardController].id,
+                        userLike = Random.nextBoolean()
+                    )
+                )
 
                 listCardController++
 
             }, userInformation = {
-                navController.navigate("user_information/${listUsersState[listCardController].id}/${loggedUserId}")
+                navController.navigate("user_information/${listUsersState[listCardController].id}/${loggedUserId}?listCardController=$listCardController")
             })
         } else {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth()
             ) {
-
                 Text(text = "Acabou!")
             }
         }

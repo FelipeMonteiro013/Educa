@@ -17,7 +17,7 @@ import java.util.concurrent.Executors
     entities = [User::class, Interest::class, AcademicEducation::class, Skill::class, Experience::class, Like::class],
     version = 4
 )
-abstract class ConnectionDb : RoomDatabase() {
+abstract class ConnectionDbBackup : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun interestDao(): InterestDao

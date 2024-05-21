@@ -10,13 +10,13 @@ class NotificationApplication : Application() {
         super.onCreate()
 
         val notificationChannel = NotificationChannel(
-            "test_id",
-            "Teste Name",
+            "match_id",
+            "Match Notification",
 
             NotificationManager.IMPORTANCE_HIGH
         )
 
-        notificationChannel.description = "Teste Description"
+        notificationChannel.description = "Novo Match"
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)

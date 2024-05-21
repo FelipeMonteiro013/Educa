@@ -31,7 +31,12 @@ import com.example.educa.ui.theme.Secondary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun UserInformationScreen(navController: NavController, id: String, loggedUserId: String) {
+fun UserInformationScreen(
+    navController: NavController,
+    id: String,
+    loggedUserId: String,
+    listCardController: String
+) {
 
     val context = LocalContext.current
     val userRepository = UserRepository(context)
@@ -47,7 +52,7 @@ fun UserInformationScreen(navController: NavController, id: String, loggedUserId
 
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.navigate("home/${loggedUserId}") }) {
+            IconButton(onClick = { navController.navigate("home/${loggedUserId}?listCardController=$listCardController") }) {
 
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,
@@ -67,90 +72,28 @@ fun UserInformationScreen(navController: NavController, id: String, loggedUserId
         ) {
 
 
-            if (userData.interest.size > 0) {
+            if (userData.interest.isNotEmpty()) {
                 InformationCardComponent(
                     title = "Minha área de interesse:",
                     list = userData.interest
                 )
             }
 
-            if (userData.academicEducation.size > 0) {
+            if (userData.academicEducation.isNotEmpty()) {
                 InformationCardComponent(
                     title = "Minha formação academica:",
                     list = userData.academicEducation
                 )
             }
-            if (userData.skills.size > 0) {
+            if (userData.skills.isNotEmpty()) {
                 InformationCardComponent(title = "Minhas habilidades:", list = userData.skills)
             }
-            if (userData.experiences.size > 0) {
+            if (userData.experiences.isNotEmpty()) {
                 InformationCardComponent(
                     title = "Minhas experiencias:",
                     list = userData.experiences
                 )
             }
-
-//                Card(
-//                    onClick = { /*TODO*/ }, modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 10.dp)
-//                ) {
-//                    Column(modifier = Modifier.padding(10.dp)) {
-//                        Text(
-//                            text = "Minha área de interesse:",
-//                            fontWeight = FontWeight.Bold,
-//                            fontSize = 18.sp
-//                        )
-//                        Divider(modifier = Modifier.padding(vertical = 10.dp))
-//
-//                        val listAreaOfInterest by remember {
-//                            mutableStateOf(
-//                                arrayOf(
-//                                    "Técnologia",
-//                                    "Inovação",
-//                                    "Negócios",
-//                                    "Artes",
-//                                    "Cultura",
-//                                    "Ciências",
-//                                    "Pesquisa",
-//                                    "Saúde",
-//                                    "Bem-estar",
-//                                    "Educação",
-//                                    "Ensino",
-//                                    "Sustentabilidade",
-//                                    "Meio Ambiente"
-//                                )
-//                            )
-//                        }
-//
-//                        FlowRow {
-//                            listAreaOfInterest.forEachIndexed { index, s ->
-//                                Box(modifier = Modifier.padding(horizontal = 2.dp)) {
-//
-//                                    FilterChip(
-//                                        selected = true,
-//                                        onClick = {},
-//                                        label = {
-//                                            Text(
-//                                                text = s,
-//                                                maxLines = 1,
-//                                                textAlign = TextAlign.Center
-//                                            )
-//                                        },
-//                                        colors = FilterChipDefaults.filterChipColors(
-//                                            labelColor = Color.Gray,
-//                                            selectedLabelColor = Color.White,
-//                                            selectedContainerColor = Primary
-//                                        ),
-//                                        shape = RoundedCornerShape(20.dp)
-//                                    )
-//
-//                                }
-//
-//                            }
-//                        }
-//                    }
-//                }
 
         }
 
