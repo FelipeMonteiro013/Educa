@@ -1,8 +1,6 @@
 package com.example.educa.screens
 
 import android.Manifest
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,10 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -181,49 +178,46 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                     icon = { Icon(Icons.Outlined.Home, contentDescription = "Pagina inicial") },
                     selected = selectedItem == 0,
                     onClick = { selectedItem = 0 },
+                    label = {
+                        Text(text = "Início")
+                    },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Secondary,
                         unselectedIconColor = Primary,
+                        indicatorColor = BackgroundColor,
+
                     )
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Matches") },
                     selected = selectedItem == 1,
                     onClick = { selectedItem = 1 },
+                    label = {
+                        Text(text = "Meus Matches")
+                    },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Secondary,
                         unselectedIconColor = Primary,
-                        indicatorColor = Color.White,
+                        indicatorColor = BackgroundColor,
 
                         )
                 )
+
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            Icons.Outlined.Notifications, contentDescription = "Notificações"
+                            Icons.Outlined.Logout, contentDescription = "Sair"
                         )
+                    },
+                    label = {
+                        Text(text = "Sair")
                     },
                     selected = selectedItem == 2,
-                    onClick = { selectedItem = 2 },
+                    onClick = { navController.navigate("login") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Secondary,
                         unselectedIconColor = Primary,
-                        indicatorColor = Color.White,
-
-                        )
-                )
-                NavigationBarItem(
-                    icon = {
-                        Icon(
-                            Icons.Outlined.AccountCircle, contentDescription = "Perfil"
-                        )
-                    },
-                    selected = selectedItem == 3,
-                    onClick = { selectedItem = 3 },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Secondary,
-                        unselectedIconColor = Primary,
-                        indicatorColor = Color.White,
+                        indicatorColor = BackgroundColor,
 
                         )
                 )
