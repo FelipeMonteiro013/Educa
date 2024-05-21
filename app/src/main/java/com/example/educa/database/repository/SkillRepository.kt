@@ -11,6 +11,10 @@ class SkillRepository(context: Context){
         return db.create(skill)
     }
 
+    fun insertAll(skills: List<Skill>) {
+        return db.insertAll(skills)
+    }
+
     fun listSkills(): List<Skill>{
         return db.listSkills()
     }

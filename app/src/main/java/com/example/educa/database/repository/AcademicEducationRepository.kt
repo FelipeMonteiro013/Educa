@@ -11,6 +11,10 @@ class AcademicEducationRepository(context: Context){
         return db.create(academicEducation)
     }
 
+    fun insertAll(listAcademicEducation: List<AcademicEducation>) {
+        return db.insertAll(listAcademicEducation)
+    }
+
     fun listAcademicEducation(): List<AcademicEducation>{
         return db.listAcademicEducation()
     }

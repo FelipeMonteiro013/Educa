@@ -32,14 +32,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.educa.components.RegisterComponent
+import com.example.educa.database.repository.InterestRepository
 import com.example.educa.database.repository.UserRepository
+import com.example.educa.model.Interest
 import com.example.educa.model.User
 import com.example.educa.ui.theme.Primary
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun RegisterEmailScreen(navController: NavHostController) {
-
+    val context = LocalContext.current
+    
     var email by remember {
         mutableStateOf("")
     }
@@ -92,7 +95,6 @@ fun RegisterEmailScreen(navController: NavHostController) {
 
     var currentProgress by remember { mutableFloatStateOf(0f) }
 
-    val context = LocalContext.current
 
     val userRepository = UserRepository(context)
 

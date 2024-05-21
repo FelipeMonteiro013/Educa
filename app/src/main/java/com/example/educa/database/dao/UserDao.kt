@@ -14,7 +14,7 @@ interface UserDao {
     fun create(user: User) : Long
 
     @Insert
-    fun insertAll(listUsers: List<User>) : List<Long>
+    fun insertAll(listUsers: List<User>)
 
     @Update
     fun update(user: User) : Int

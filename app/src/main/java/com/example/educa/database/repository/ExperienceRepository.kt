@@ -11,6 +11,10 @@ class ExperienceRepository(context: Context){
         return db.create(experience)
     }
 
+    fun insertAll(experiences: List<Experience>) {
+        return db.insertAll(experiences)
+    }
+
     fun listExperience(): List<Experience>{
         return db.listExperience()
     }

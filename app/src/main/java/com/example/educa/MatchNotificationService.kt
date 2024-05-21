@@ -2,8 +2,6 @@ package com.example.educa
 
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import kotlin.random.Random
 
@@ -17,7 +15,7 @@ class MatchNotificationService(
             NotificationCompat.Builder(context, "match_id")
                 .setContentTitle("Parabéns, $loggedUserName!")
                 .setContentText("Você tem um novo match com $userName!")
-                .setSmallIcon(R.drawable.baseline_image_not_supported_24)
+                .setSmallIcon(R.drawable.baseline_menu_book_24)
                 .setPriority(NotificationManager.IMPORTANCE_HIGH).setAutoCancel(true).build()
 
         notificationManager.notify(

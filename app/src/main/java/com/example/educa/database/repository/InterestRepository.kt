@@ -11,6 +11,10 @@ class InterestRepository(context: Context){
         return db.create(interest)
     }
 
+    fun insertAll(interests: List<Interest>) {
+        return db.insertAll(interests)
+    }
+
     fun listInterests(): List<Interest>{
         return db.listInterests()
     }
