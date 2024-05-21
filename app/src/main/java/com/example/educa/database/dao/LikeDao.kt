@@ -11,8 +11,8 @@ interface LikeDao {
     @Insert
     fun insert(like: Like): Long
 
-    @Query("SELECT * FROM tbl_likes WHERE userId = :userId")
-    fun getPossibleLike(userId: Long): Like
+    @Query("SELECT DISTINCT * FROM tbl_likes WHERE loggedUserLike = 1 AND userLike = 1 AND loggedUserId = :id")
+    fun getMatches(id: Long): List<Like>
 
     @Update
     fun like(like: Like)

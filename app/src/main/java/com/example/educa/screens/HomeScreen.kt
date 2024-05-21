@@ -7,12 +7,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -28,13 +33,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.educa.MatchNotificationService
+import com.example.educa.R
 import com.example.educa.components.CardMatchComponent
 import com.example.educa.database.repository.LikeRepository
 import com.example.educa.database.repository.UserRepository
@@ -67,7 +79,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
 
     val userRepository = UserRepository(context = context)
     val loggedUser = userRepository.getUserById(loggedUserId.toLong())
-
+    var selectedItem by remember { mutableIntStateOf(0) }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -94,80 +106,145 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                     text = "+", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Secondary
                 )
             }
-            IconButton(onClick = {
-                navController.navigate("discovery_tweaks/${loggedUserId}")
-            }) {
+            if (selectedItem == 0) {
+                IconButton(onClick = {
+                    navController.navigate("discovery_tweaks/${loggedUserId}")
+                }) {
 
-                Icon(
-                    tint = Primary,
-                    imageVector = Icons.Outlined.Tune,
-                    contentDescription = "Ajustes de descoberta"
-                )
-            }
-
-
-        }
-
-
-        var listCardController by remember {
-            mutableIntStateOf(if (listCardController.isNotEmpty()) listCardController.toInt() else 0)
-        }
-
-        val listUsersState by remember {
-            mutableStateOf(userRepository.listUsers())
-        }
-
-        if (listCardController < listUsersState.size) {
-            CardMatchComponent(user = listUsersState[listCardController], isLike = {
-                val likeRepository = LikeRepository(context)
-                val likeId = likeRepository.insert(
-                    Like(
-                        id = 0,
-                        loggedUserId = loggedUser.id,
-                        loggedUserLike = true,
-                        userId = listUsersState[listCardController].id,
-                        userLike = Random.nextBoolean()
-                    )
-                )
-
-                val isMatch = likeRepository.verifyMatch(likeId)
-
-                if (isMatch) {
-                    matchNotificationService.showBasicNotification(
-                        loggedUser.name,
-                        listUsersState[listCardController].name
+                    Icon(
+                        tint = Primary,
+                        imageVector = Icons.Outlined.Tune,
+                        contentDescription = "Ajustes de descoberta"
                     )
                 }
+            }
 
-                listCardController++
-            }, isNotLike = {
-                val likeRepository = LikeRepository(context)
-                likeRepository.insert(
-                    Like(
-                        id = 0,
-                        loggedUserId = loggedUser.id,
-                        loggedUserLike = false,
-                        userId = listUsersState[listCardController].id,
-                        userLike = Random.nextBoolean()
+
+        }
+
+
+        if (selectedItem == 0) {
+
+            var listCardController by remember {
+                mutableIntStateOf(if (listCardController.isNotEmpty()) listCardController.toInt() else 0)
+            }
+
+            val listUsersState by remember {
+                mutableStateOf(userRepository.listUsers())
+            }
+
+            if (listCardController < listUsersState.size) {
+                CardMatchComponent(user = listUsersState[listCardController], isLike = {
+                    val likeRepository = LikeRepository(context)
+                    val likeId = likeRepository.insert(
+                        Like(
+                            id = 0,
+                            loggedUserId = loggedUser.id,
+                            loggedUserLike = true,
+                            userId = listUsersState[listCardController].id,
+                            userLike = Random.nextBoolean()
+                        )
                     )
-                )
 
-                listCardController++
+                    val isMatch = likeRepository.verifyMatch(likeId)
 
-            }, userInformation = {
-                navController.navigate("user_information/${listUsersState[listCardController].id}/${loggedUserId}?listCardController=$listCardController")
-            })
-        } else {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Acabou!")
+                    if (isMatch) {
+                        matchNotificationService.showBasicNotification(
+                            loggedUser.name,
+                            listUsersState[listCardController].name
+                        )
+                    }
+
+                    listCardController++
+                }, isNotLike = {
+                    val likeRepository = LikeRepository(context)
+                    likeRepository.insert(
+                        Like(
+                            id = 0,
+                            loggedUserId = loggedUser.id,
+                            loggedUserLike = false,
+                            userId = listUsersState[listCardController].id,
+                            userLike = Random.nextBoolean()
+                        )
+                    )
+
+                    listCardController++
+
+                }, userInformation = {
+                    navController.navigate("user_information/${listUsersState[listCardController].id}/${loggedUserId}?listCardController=$listCardController")
+                })
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Acabou!")
+                }
             }
         }
 
-        var selectedItem by remember { mutableIntStateOf(0) }
+        if (selectedItem == 1) {
+
+
+            LazyColumn(modifier = Modifier.height(650.dp)) {
+
+                val likeRepository = LikeRepository(context)
+
+                val listOfMatches = likeRepository.getMatches(loggedUser.id)
+
+                for (item in listOfMatches) {
+                    val user = userRepository.getUserById(item.userId)
+
+                    item {
+                        Row {
+                            androidx.compose.material3.ListItem(
+                                headlineContent = {
+                                    Text(
+                                        text = user.name,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                },
+                                supportingContent = {
+                                    Text(
+                                        text = if (user.accountType == 0) "Aluno(a)" else "Professor(a)",
+                                        color = Primary
+                                    )
+                                    Text(
+                                        text = user.email,
+                                        modifier = Modifier.padding(top = 5.dp)
+                                    )
+
+                                },
+                                leadingContent = {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(user.userPhoto)
+                                            .build(),
+                                        contentDescription = null,
+                                        imageLoader = ImageLoader(context),
+                                        contentScale = ContentScale.Crop,
+                                        error = painterResource(R.drawable.baseline_image_not_supported_24),
+                                        modifier = Modifier
+                                            .width(70.dp)
+                                            .height(70.dp)
+                                            .clip(CircleShape)
+                                    )
+
+                                }
+
+                            )
+                        }
+                        Divider(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
+                        )
+                    }
+                }
+            }
+        }
+
 
 //        Footer
         Row {
@@ -186,7 +263,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                         unselectedIconColor = Primary,
                         indicatorColor = BackgroundColor,
 
-                    )
+                        )
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.MenuBook, contentDescription = "Matches") },
