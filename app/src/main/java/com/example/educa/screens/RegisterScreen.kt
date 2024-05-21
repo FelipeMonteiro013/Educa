@@ -2,9 +2,7 @@ package com.example.educa.screens
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,7 +11,6 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -21,20 +18,16 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.educa.components.RegisterComponent
-import com.example.educa.database.repository.InterestRepository
 import com.example.educa.database.repository.UserRepository
-import com.example.educa.model.Interest
 import com.example.educa.model.User
 import com.example.educa.ui.theme.Primary
 
@@ -42,7 +35,7 @@ import com.example.educa.ui.theme.Primary
 @Composable
 fun RegisterEmailScreen(navController: NavHostController) {
     val context = LocalContext.current
-    
+
     var email by remember {
         mutableStateOf("")
     }
@@ -65,7 +58,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
     }
 
     var distance by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(1)
     }
 
     val tempList = listOf<Int>()
@@ -124,10 +117,12 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress -= 0F
                             navController.navigate("welcome")
                         },
+                        updateIsEnableButton = email.isNotEmpty(),
                         nextStep = {
                             currentProgress += 10F
                             controllerPage = "password"
                         },
+
                         step = controllerPage
                     )
                 }
@@ -171,7 +166,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = "name"
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = password.isNotEmpty(),
                     )
                 }
 
@@ -193,7 +189,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = "dtNasc"
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = name.isNotEmpty(),
                     )
                 }
 
@@ -213,7 +210,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = "gender"
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = dtNasc.isNotEmpty(),
                     )
                 }
 
@@ -232,7 +230,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                         step = controllerPage,
                         updateGender = {
                             gender = it
-                        }
+                        },
+                        updateIsEnableButton = gender.isNotEmpty(),
                     )
                 }
 
@@ -251,7 +250,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                         step = controllerPage,
                         updateAccountType = {
                             accountType = it
-                        }
+                        },
+                        updateIsEnableButton = true,
                     )
                 }
 
@@ -271,6 +271,7 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             controllerPage = "aboutYouProfessional"
                         },
                         step = controllerPage,
+                        updateIsEnableButton = true,
                     )
                 }
 
@@ -292,7 +293,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = "aboutYouPersonal"
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = userInterestChecked.isNotEmpty() && userAcademicEducationChecked.isNotEmpty(),
                     )
                 }
 
@@ -314,7 +316,8 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = "userPhoto"
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = userSkillsChecked.isNotEmpty() && userExperiencesChecked.isNotEmpty(),
                     )
                 }
 
@@ -354,18 +357,9 @@ fun RegisterEmailScreen(navController: NavHostController) {
                             currentProgress += 10F
                             controllerPage = ""
                         },
-                        step = controllerPage
+                        step = controllerPage,
+                        updateIsEnableButton = true,
                     )
-                }
-
-                else -> {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Text(text = "Em desenvolvimento...", fontWeight = FontWeight.Bold)
-                    }
                 }
             }
 

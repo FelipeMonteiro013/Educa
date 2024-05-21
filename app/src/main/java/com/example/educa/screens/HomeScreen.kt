@@ -1,7 +1,6 @@
 package com.example.educa.screens
 
 import android.Manifest
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +64,14 @@ import kotlin.random.Random
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun HomeScreen(navController: NavController, loggedUserId: String, listCardController: String) {
+fun HomeScreen(
+    navController: NavController,
+    loggedUserId: String,
+    listCardController: String,
+    accountTypeFilter: String,
+    distance: String,
+
+    ) {
 
     val context = LocalContext.current
 
@@ -101,6 +107,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
 //        Header
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -116,7 +123,13 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
             }
             if (selectedItem == 0) {
                 IconButton(onClick = {
-                    navController.navigate("discovery_tweaks/${loggedUserId}?listCardController=$controller")
+                    navController.navigate(
+                        "discovery_tweaks/${loggedUserId}?listCardController=$controller&accountType=${accountTypeFilter}&distance=${
+                            if (distance == "null") {
+                                80
+                            } else distance.toInt()
+                        }"
+                    )
                 }) {
 
                     Icon(
@@ -130,15 +143,29 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
 
         }
 
-
-
-        Log.i("TESTE", "HomeScreen: $controller")
-
         if (selectedItem == 0) {
 
 
+            val filterAccountType by remember {
+                mutableStateOf(if (accountTypeFilter != "null" && accountTypeFilter.toInt() != 2) accountTypeFilter.toInt() else null)
+            }
+
+            val filterDistance by remember {
+                mutableIntStateOf(
+                    if (distance == "null") {
+                        80
+                    } else distance.toInt()
+                )
+            }
+
             val listUsersState by remember {
-                mutableStateOf(userRepository.listUsersDiferentLoggedUser(loggedUserId = loggedUser.id))
+                mutableStateOf(
+                    userRepository.testFilter(
+                        loggedUserId = loggedUser.id,
+                        filterAccountType,
+                        filterDistance
+                    )
+                )
             }
 
             if (controller < listUsersState.size) {
@@ -179,7 +206,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                     controller++
 
                 }, userInformation = {
-                    navController.navigate("user_information/${listUsersState[controller].id}/${loggedUserId}?listCardController=$controller")
+                    navController.navigate("user_information/${listUsersState[controller].id}/${loggedUserId}?listCardController=${controller}&accountType=${accountTypeFilter}&distance=${filterDistance}")
                 })
             } else {
                 Column(
@@ -187,7 +214,6 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-
 
                     Icon(
                         imageVector = Icons.Outlined.MenuBook,
@@ -226,7 +252,7 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
         if (selectedItem == 1) {
 
             val likeRepository = LikeRepository(context)
-            val listOfMatches = likeRepository.getMatches(loggedUser.id)
+            val listOfMatches = likeRepository.getMatches(loggedUserId = loggedUser.id)
 
             if (listOfMatches.isEmpty()) {
 
@@ -262,7 +288,6 @@ fun HomeScreen(navController: NavController, loggedUserId: String, listCardContr
                 }
             } else {
                 LazyColumn(modifier = Modifier.height(650.dp)) {
-
 
                     for (item in listOfMatches) {
                         val user = userRepository.getUserById(item.userId)

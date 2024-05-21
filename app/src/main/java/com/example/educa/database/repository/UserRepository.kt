@@ -32,5 +32,13 @@ class UserRepository(context: Context) {
         return db.login(email, password)
     }
 
+    fun listByAccountType (loggedUserId: Long, accountType: Int) :List<User> {
+        return db.listByAccountType(loggedUserId, accountType)
+    }
+
+    fun testFilter(loggedUserId: Long, accountType: Int?, distance: Int) :List<User> {
+        return db.testFilter(loggedUserId = loggedUserId, accountType,  distance)
+    }
+
 
 }

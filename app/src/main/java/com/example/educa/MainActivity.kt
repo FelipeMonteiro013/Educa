@@ -48,32 +48,52 @@ class MainActivity : ComponentActivity() {
                     composable("welcome") { WelcomeScreen(navController) }
                     composable("register_email") { RegisterEmailScreen(navController) }
                     composable(
-                        "home/{loggedUserId}?listCardController={listCardController}",
+                        "home/{loggedUserId}?listCardController={listCardController}&accountType={accountType}&distance={distance}",
                         arguments = listOf(
-                            navArgument(name = "listCardController") {
-                                defaultValue = "0"
-                            }
+                            navArgument(name = "listCardController") { defaultValue = "0" }
                         ),
-                    ) {
+
+                        ) {
                         val loggedUserId = it.arguments?.getString("loggedUserId")
                         val listCardController = it.arguments?.getString("listCardController")
-                        HomeScreen(navController, loggedUserId!!, listCardController!!)
+                        val accountType = it.arguments?.getString("accountType", "null")
+                        val distance = it.arguments?.getString("distance", "null")
+
+                        HomeScreen(
+                            navController,
+                            loggedUserId!!,
+                            listCardController!!,
+                            accountType!!,
+                            distance!!
+                        )
                     }
-                    composable("user_information/{id}/{loggedUserId}?listCardController={listCardController}") {
+                    composable("user_information/{id}/{loggedUserId}?listCardController={listCardController}&accountType={accountType}&distance={distance}") {
                         val id = it.arguments?.getString("id")
                         val loggedUserId = it.arguments?.getString("loggedUserId")
                         val listCardController = it.arguments?.getString("listCardController")
+                        val accountType = it.arguments?.getString("accountType", "null")
+                        val distance = it.arguments?.getString("distance", "null")
                         UserInformationScreen(
                             navController,
                             id!!,
                             loggedUserId!!,
-                            listCardController!!
+                            listCardController!!,
+                            accountType!!,
+                            distance!!
                         )
                     }
-                    composable("discovery_tweaks/{loggedUserId}?listCardController={listCardController}") {
+                    composable("discovery_tweaks/{loggedUserId}?listCardController={listCardController}&accountType={accountType}&distance={distance}") {
                         val loggedUserId = it.arguments?.getString("loggedUserId")
                         val listCardController = it.arguments?.getString("listCardController")
-                        DiscoveryTweaksScreen(navController, loggedUserId!!, listCardController!!)
+                        val accountType = it.arguments?.getString("accountType", "null")
+                        val distance = it.arguments?.getString("distance", "null")
+                        DiscoveryTweaksScreen(
+                            navController,
+                            loggedUserId!!,
+                            listCardController!!,
+                            accountType!!,
+                            distance!!
+                        )
                     }
                 }
             }

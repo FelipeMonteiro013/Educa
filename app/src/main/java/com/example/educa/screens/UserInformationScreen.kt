@@ -35,7 +35,9 @@ fun UserInformationScreen(
     navController: NavController,
     id: String,
     loggedUserId: String,
-    listCardController: String
+    listCardController: String,
+    accountType: String,
+    distance: String
 ) {
 
     val context = LocalContext.current
@@ -52,7 +54,7 @@ fun UserInformationScreen(
 
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.navigate("home/${loggedUserId}?listCardController=$listCardController") }) {
+            IconButton(onClick = { navController.navigate("home/${loggedUserId}?listCardController=${listCardController}&accountType=${accountType}&distance=${distance.toInt()}") }) {
 
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,

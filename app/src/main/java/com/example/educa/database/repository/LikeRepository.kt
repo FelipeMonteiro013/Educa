@@ -15,13 +15,8 @@ class LikeRepository(context: Context) {
         return db.verify(likeId)
     }
 
-    fun getMatches(id: Long): List<Like> {
-        return db.getMatches(id)
+    fun getMatches(loggedUserId: Long): List<Like> {
+        return db.getMatches(loggedUserId)
     }
-
-    fun like(like: Like) {
-        return db.like(like)
-    }
-
 
 }

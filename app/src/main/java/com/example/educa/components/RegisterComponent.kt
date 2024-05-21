@@ -2,7 +2,6 @@ package com.example.educa.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -94,6 +93,7 @@ fun RegisterComponent(
     updateAcademicEducationCheckedList: (List<Int>) -> Unit = {},
     updateSkillsCheckedList: (List<Int>) -> Unit = {},
     updateExperiencesCheckedList: (List<Int>) -> Unit = {},
+    updateIsEnableButton : Boolean
 ) {
 
     Column(
@@ -367,11 +367,6 @@ fun RegisterComponent(
                                                     } else {
                                                         multipleInterestChecked.plus(interest.id)
                                                     }
-
-                                                Log.i(
-                                                    "TESTE",
-                                                    "multipleInterestChecked: $multipleInterestChecked"
-                                                )
                                                 updateInterestCheckedList(multipleInterestChecked)
                                             },
                                             label = {
@@ -420,10 +415,6 @@ fun RegisterComponent(
                                                             academicEducation.id
                                                         )
                                                     }
-                                                Log.i(
-                                                    "TESTE",
-                                                    "multipleInterestChecked: $multipleAcademicEducationChecked"
-                                                )
                                                 updateAcademicEducationCheckedList(
                                                     multipleAcademicEducationChecked
                                                 )
@@ -494,10 +485,6 @@ fun RegisterComponent(
                                                     } else {
                                                         multipleSkillsChecked.plus(skill.id.toInt())
                                                     }
-                                                Log.i(
-                                                    "TESTE",
-                                                    "multipleInterestChecked: $multipleSkillsChecked"
-                                                )
                                                 updateSkillsCheckedList(multipleSkillsChecked)
                                             },
                                             label = {
@@ -543,10 +530,6 @@ fun RegisterComponent(
                                                     } else {
                                                         multipleExperiencesChecked.plus(experience.id.toInt())
                                                     }
-                                                Log.i(
-                                                    "TESTE",
-                                                    "multipleInterestChecked: $multipleExperiencesChecked"
-                                                )
                                                 updateExperiencesCheckedList(
                                                     multipleExperiencesChecked
                                                 )
@@ -659,6 +642,7 @@ fun RegisterComponent(
             onClick = if (step == "userPhoto") createUser else nextStep,
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Primary),
+            enabled = updateIsEnableButton,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(30.dp)

@@ -11,8 +11,15 @@ interface LikeDao {
     @Insert
     fun insert(like: Like): Long
 
-    @Query("SELECT DISTINCT * FROM tbl_likes WHERE loggedUserLike = 1 AND userLike = 1 AND loggedUserId = :id")
-    fun getMatches(id: Long): List<Like>
+
+    @Query(
+        "SELECT MIN(id) as id, loggedUserId, loggedUserLike, userId, userLike\n" +
+                "FROM tbl_likes\n" +
+                "WHERE loggedUserId = :loggedUserId\n" +
+                "GROUP BY loggedUserId, loggedUserLike, userId, userLike\n" +
+                "HAVING loggedUserLike = 1 AND userLike = 1"
+    )
+    fun getMatches(loggedUserId: Long): List<Like>
 
     @Update
     fun like(like: Like)

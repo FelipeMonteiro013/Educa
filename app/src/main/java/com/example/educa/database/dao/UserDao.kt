@@ -32,4 +32,14 @@ interface UserDao {
 
     @Query("SELECT * FROM tbl_user WHERE email = :email AND password = :password")
     fun login(email: String, password: String) : Long
+
+    @Query("SELECT * FROM tbl_user WHERE id != :loggedUserId AND account_type = :accountType")
+    fun listByAccountType(loggedUserId: Long, accountType : Int  ) : List<User>
+
+    @Query("""
+        SELECT * FROM tbl_user
+        WHERE (:accountType IS NULL OR account_type = :accountType) AND id != :loggedUserId AND (:distance IS NULL OR distance <= :distance)
+    """)
+    fun testFilter(loggedUserId: Long, accountType : Int?, distance: Int?  ) : List<User>
+
 }
